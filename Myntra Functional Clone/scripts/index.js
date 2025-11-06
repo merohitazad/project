@@ -33,7 +33,7 @@ function displayItemOnHomePage() {
   items.forEach((item) => {
     innerHTML += `
   <div class="item-container">
-    <a href="../pages/product.html" class="product-item-display" data-id="${item.id}">
+    <a href="./pages/product.html" class="product-item-display" data-id="${item.id}">
       <img class="item-image" src="${item.image}" alt="Item Image" />
       <div class="rating">${item.rating.stars} ⭐ | ${item.rating.count}</div>
       <div class="company-name">${item.company}</div>
