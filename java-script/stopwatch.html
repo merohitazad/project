@@ -66,12 +66,12 @@
       startButtonElement.addEventListener("click", () => {
         clicks++;
         if (clicks % 2 == 1) {
-          document.querySelector("#start-button").innerText = "Stop";
-          document.querySelector("#start-button").style.backgroundColor = "tomato";
+          startButtonElement.innerText = "Stop";
+          startButtonElement.style.backgroundColor = "tomato";
           startTimer();
         } else {
-          document.querySelector("#start-button").innerText = "Start";
-          document.querySelector("#start-button").style.backgroundColor = "lightgreen";
+          startButtonElement.innerText = "Start";
+          startButtonElement.style.backgroundColor = "lightgreen";
           stopTimer();
         }
       });
@@ -92,6 +92,7 @@
         clearInterval(intervalID);
         document.querySelector("input").value = "";
         startButtonElement.innerText = "Start";
+        startButtonElement.style.backgroundColor = "lightgreen";
         start = 0;
         clicks = 0;
         elapsed = 0;
