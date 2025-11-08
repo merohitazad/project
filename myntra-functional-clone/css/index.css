@@ -165,6 +165,77 @@ header {
   font-weight: 700;
 }
 
+@media only screen and (max-width: 768px) {
+  body {
+    overflow-x: hidden;
+    width: 100%;
+  }
+
+  header {
+    height: 16vh;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: center;
+    position: fixed;
+  }
+
+  #menu-icon {
+    font-size: 30px;
+    font-weight: 100;
+    visibility: visible;
+    order: 1;
+    width: 10%;
+    margin-left: 2%;
+    height: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .nav {
+    display: none;
+  }
+
+  .logo {
+    order: 2;
+    width: 20%;
+    height: 50%;
+  }
+
+  #myntralogo {
+    height: 25px;
+  }
+
+  .searchbar {
+    order: 4;
+    width: 90%;
+    height: 45%;
+    margin: 0vh 0vh 2vh 0vh;
+  }
+
+  #searchicon {
+    border-radius: 25px 0px 0px 25px;
+    background-color: #e6e6ed;
+  }
+
+  #searchinput {
+    border-radius: 0px 25px 25px 0px;
+    background-color: #e6e6ed;
+  }
+
+  .action {
+    order: 3;
+    width: 50%;
+    height: 50%;
+    margin-left: 10%;
+  }
+
+  main {
+    padding-top: 4vh;
+  }
+}
+
 /* Main Section */
 
 .items-container {
@@ -256,6 +327,17 @@ header {
   font-size: 18px;
   font-weight: 500;
   cursor: pointer;
+}
+
+@media only screen and (max-width: 768px) {
+  .items-container {
+    width: 100%;
+    margin: 0;
+  }
+
+  .item-container {
+    width: 75%;
+  }
 }
 
 /* Footer Section */

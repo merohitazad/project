@@ -134,3 +134,21 @@
   height: 14px;
   cursor: pointer;
 }
+
+@media only screen and (max-width: 768px) {
+  .bag-page {
+    margin: 0px;
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+  }
+
+  .bag-items-container {
+    width: 100%;
+  }
+
+  .bag-summary {
+    width: 95%;
+  }
+}
