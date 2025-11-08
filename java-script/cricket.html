@@ -1,167 +1,183 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cricket Game</title>
-    <style>
-      body {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        margin: 0;
-        font-family: Arial, sans-serif;
-        font-size: 14px;
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cricket Game</title>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+    }
+
+    h2,
+    h3 {
+      font-size: 1.5rem;
+    }
+
+    .choice_button {
+      height: 100px;
+      width: 100px;
+      font-size: 0px;
+      background-color: lightgreen;
+      margin: 10px;
+      border: 0px solid;
+      border-radius: 50px;
+    }
+
+    img {
+      height: 75px;
+    }
+
+    .reset_button {
+      height: 40px;
+      width: 100px;
+      font-size: 18px;
+      margin: 10px;
+      font-weight: bold;
+      border-radius: 5px;
+    }
+
+    .display {
+      height: 250px;
+    }
+
+    @media (max-width: 800px) {
+      .choice_button {
+        width: 90px;
+        height: 90px;
       }
 
       h1 {
-        font-size: 2.5rem;
+        text-align: center;
       }
+    }
+  </style>
+</head>
 
-      h2,
-      h3 {
-        font-size: 1.5rem;
-      }
+<body>
+  <h1>Bat Ball Stump Game</h1>
+  <div>
+    <button class="choice_button">
+      Bat<img src="images/Bat.png" alt="Bat Image" />
+    </button>
+    <button class="choice_button">
+      Ball<img src="images/Ball.png" alt="Ball Image" />
+    </button>
+    <button class="choice_button">
+      Stump<img src="images/Stumps.png" alt="Stump Image" />
+    </button>
+  </div>
+  <div>
+    <button class="reset_button" onclick="localStorage.clear(); resetScore();">
+      Reset
+    </button>
+  </div>
+  <div class="display">
+  <h2 id="display_result"></h2>
+  <h2 id="display_score"></h2>
+  <h3></h3>
+  </div>
 
-      .choice_button {
-        height: 100px;
-        width: 100px;
-        font-size: 0px;
-        background-color: lightgreen;
-        margin: 10px;
-        border: 0px solid;
-        border-radius: 50px;
-      }
-
-      img {
-        height: 75px;
-      }
-
-      .reset_button {
-        height: 40px;
-        width: 100px;
-        font-size: 18px;
-        margin: 10px;
-        font-weight: bold;
-        border-radius: 5px;
-      }
-    </style>
-  </head>
-  <body>
-    <h1>Bat Ball Stump Game</h1>
-    <div>
-      <button class="choice_button">
-        Bat<img src="./Images/Bat.png" alt="Bat Image" />
-      </button>
-      <button class="choice_button">
-        Ball<img src="./Images/Ball.png" alt="Ball Image" />
-      </button>
-      <button class="choice_button">
-        Stump<img src="./Images/Stumps.png" alt="Stump Image" />
-      </button>
-    </div>
-    <div>
-      <button
-        class="reset_button"
-        onclick="localStorage.clear(); resetScore();"
-      >
-        Reset
-      </button>
-    </div>
-
-    <h2 id="display_result"></h2>
-    <h2 id="display_score"></h2>
-    <h3></h3>
-
-    <script>
-      let score;
-      resetScore();
-      function resetScore() {
-        let currentScoreStr = localStorage.getItem("Score");
-        let initialScore = currentScoreStr
-          ? JSON.parse(currentScoreStr)
-          : {
-              won: 0,
-              lost: 0,
-              tie: 0,
-            };
-        score = initialScore;
-        score.displayScore = function () {
-          return `Won: ${this.won}, Lost: ${this.lost}, Tie: ${this.tie}`;
+  <script>
+    let score;
+    resetScore();
+    function resetScore() {
+      let currentScoreStr = localStorage.getItem("Score");
+      let initialScore = currentScoreStr
+        ? JSON.parse(currentScoreStr)
+        : {
+          won: 0,
+          lost: 0,
+          tie: 0,
         };
+      score = initialScore;
+      score.displayScore = function () {
+        return `Won: ${this.won}, Lost: ${this.lost}, Tie: ${this.tie}`;
+      };
+      localStorage.setItem("Score", JSON.stringify(score));
+    }
+
+    document.querySelectorAll(".choice_button").forEach((button) => {
+      button.addEventListener("click", () => {
+        function myChoice() {
+          return button.innerText;
+        }
+        //       console.log(`You have chosen ${myChoice()}.`);
+
+        function botChoice() {
+          let randomNumber = Math.random() * 3;
+          if (randomNumber > 2) {
+            return "Stump";
+          } else if (randomNumber > 1) {
+            return "Ball";
+          } else {
+            return "Bat";
+          }
+        }
+        //       console.log(`Bot have choosen ${botChoice()}.`);
+
+        function showResultAlert() {
+          let computerChoice = botChoice();
+
+          if (myChoice() == computerChoice) {
+            score.tie++;
+            return `You have chosen ${myChoice()}.\n\n Computer choice is ${computerChoice}. \n\n The match is a tie.`;
+          }
+          if (
+            (myChoice() == "Bat" && computerChoice == "Ball") ||
+            (myChoice() == "Ball" && computerChoice == "Stump") ||
+            (myChoice() == "Stump" && computerChoice == "Bat")
+          ) {
+            score.won++;
+            return `You have chosen ${myChoice()}.\n\n Computer choice is ${computerChoice}.\n\n You have won the game.`;
+          }
+          if (
+            (myChoice() == "Bat" && computerChoice == "Stump") ||
+            (myChoice() == "Stump" && computerChoice == "Ball") ||
+            (myChoice() == "Ball" && computerChoice == "Bat")
+          ) {
+            score.lost++;
+            return `You have chosen ${myChoice()}.\n\n Computer choice is ${computerChoice}. \n\n Computer has won, You lost.`;
+          }
+        }
+
         localStorage.setItem("Score", JSON.stringify(score));
-      }
+        document.querySelector("#display_result").innerText =
+          showResultAlert();
+        document.querySelector(
+          "#display_score"
+        ).innerText = `Score: ${score.displayScore()}`;
 
-      document.querySelectorAll(".choice_button").forEach((button) => {
-        button.addEventListener("click", () => {
-          function myChoice() {
-            return button.innerText;
-          }
-          //       console.log(`You have chosen ${myChoice()}.`);
-
-          function botChoice() {
-            let randomNumber = Math.random() * 3;
-            if (randomNumber > 2) {
-              return "Stump";
-            } else if (randomNumber > 1) {
-              return "Ball";
-            } else {
-              return "Bat";
-            }
-          }
-          //       console.log(`Bot have choosen ${botChoice()}.`);
-
-          function showResultAlert() {
-            let computerChoice = botChoice();
-
-            if (myChoice() == computerChoice) {
-              score.tie++;
-              return `You have chosen ${myChoice()}.\n\n Computer choice is ${computerChoice}. \n\n The match is a tie.`;
-            }
-            if (
-              (myChoice() == "Bat" && computerChoice == "Ball") ||
-              (myChoice() == "Ball" && computerChoice == "Stump") ||
-              (myChoice() == "Stump" && computerChoice == "Bat")
-            ) {
-              score.won++;
-              return `You have chosen ${myChoice()}.\n\n Computer choice is ${computerChoice}.\n\n You have won the game.`;
-            }
-            if (
-              (myChoice() == "Bat" && computerChoice == "Stump") ||
-              (myChoice() == "Stump" && computerChoice == "Ball") ||
-              (myChoice() == "Ball" && computerChoice == "Bat")
-            ) {
-              score.lost++;
-              return `You have chosen ${myChoice()}.\n\n Computer choice is ${computerChoice}. \n\n Computer has won, You lost.`;
-            }
-          }
-
-          localStorage.setItem("Score", JSON.stringify(score));
-          document.querySelector("#display_result").innerText =
-            showResultAlert();
-          document.querySelector(
-            "#display_score"
-          ).innerText = `Score: ${score.displayScore()}`;
-
-          document
-            .querySelector(".reset_button")
-            .addEventListener("click", () => {
-              document.querySelectorAll("h2").forEach((h2) => {
-                h2.innerText = "";
-              });
-              document.querySelector(
-                "h3"
-              ).innerText = `Score: ${score.displayScore()}`;
+        document
+          .querySelector(".reset_button")
+          .addEventListener("click", () => {
+            document.querySelectorAll("h2").forEach((h2) => {
+              h2.innerText = "";
             });
-          document
-            .querySelector(".choice_button")
-            .addEventListener("click", () => {
-              document.querySelector("h3").innerText = ``;
-            });
-        });
+            document.querySelector(
+              "h3"
+            ).innerText = `Score: ${score.displayScore()}`;
+          });
+        document
+          .querySelector(".choice_button")
+          .addEventListener("click", () => {
+            document.querySelector("h3").innerText = ``;
+          });
       });
-    </script>
-  </body>
+    });
+  </script>
+</body>
+
 </html>
