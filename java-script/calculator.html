@@ -10,10 +10,10 @@
       }
 
       #calculator {
-        height: 45vw;
-        width: 25vw;
+        height: 38vw;
+        width: 20vw;
         margin-left: 37.5%;
-        margin-top: 1%;
+        margin-top: 5%;
         border-radius: 10px;
         border: 1px solid rgb(107, 98, 98);
         background-color: blueviolet;
@@ -36,12 +36,29 @@
       }
 
       .button {
-        height: 5vw;
-        width: 5vw;
+        height: 4vw;
+        width: 4vw;
         margin: 0.5vw;
         font-size: 30px;
         border: 1px solid rgb(107, 98, 98);
         border-radius: 5px;
+      }
+
+      @media only screen and (max-width: 768px) {
+        #calculator {
+          width: 90%;
+          margin: 5%;
+          height: 90vh;
+        }
+
+        .button {
+        height: 10vh;
+        width: 10vh;
+        margin: 2vw;
+        font-size: 30px;
+        border: 1px solid rgb(107, 98, 98);
+        border-radius: 10px;
+      }
       }
     </style>
   </head>
