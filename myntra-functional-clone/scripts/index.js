@@ -53,15 +53,36 @@ function displayItemOnHomePage() {
 const productPage = document.querySelectorAll('.product-item-display');
 let productPageItem = JSON.parse(localStorage.getItem("Product Page Item")) || [];
 
-productPage.forEach(el => {
+// productPage.forEach(el => {
+//   el.addEventListener("click", (e) => {
+//     const id = Number(el.dataset.id);
+//     productPageItem = [];
+//     productPageItem.push(id);
+//     console.log("Clicked item id:", id);
+//     localStorage.setItem("Product Page Item",JSON.stringify(productPageItem));
+//   });
+// });
+
+// let selectedItem = items.find(item => item.id == productPageItem[0]);
+
+productPage.forEach((el) => {
   el.addEventListener("click", (e) => {
-    const id = Number(el.dataset.id);
-    productPageItem = [];
-    productPageItem.push(id);
-    console.log("Clicked item id:", id);
-    localStorage.setItem("Product Page Item",JSON.stringify(productPageItem));
+    e.preventDefault();
+
+    const id = el.dataset.id;
+    productPageItem = [id];
+    localStorage.setItem("Product Page Item", JSON.stringify(productPageItem));
+
+    const selectedItem = items.find((item) => item.id == id);
+
+    const category = (selectedItem.category || "products").toLowerCase();
+    const companySlug = selectedItem.company.toLowerCase().replace(/\s+/g, "+");
+    const productSlug = selectedItem.item_name
+      .toLowerCase()
+      .replace(/\s+/g, "-");
+
+    const productURL = `./pages/product.html#/${companySlug}/${productSlug}/${selectedItem.id}`;
+
+    window.location.href = productURL;
   });
 });
-
-let selectedItem = items.find(item => item.id == productPageItem[0]);
-
