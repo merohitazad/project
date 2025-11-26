@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="assets/js/load-components.js"></script>
+    <script id="head-placeholder"></script>
+    <script>
+      fetchComponents("./components/head.html").then((code) => {
+        const placeholder = document.getElementById("head-placeholder");
+        insertHtmlAndRunScriptsAt(placeholder, code);
+      });
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IMS Gujarat | #1 Coaching Center Of Gujarat</title>
+    <meta
+      name="description"
+      content="Aiming for top scores in CAT, IPMAT or CMAT? IMS Gujarat offers expert mentors, structured programs and proven results. Visit us and begin your journey with confidence."
+    />
+    <!-- Google Font Link -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0&icon=menu"
+      rel="stylesheet"
+    />
+    <!-- Awesome Font Link -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="./assets/css/header.css" />
+    <link rel="stylesheet" href="./assets/css/footer.css" />
+  </head>
+  <body>
+    <!-- For Google Tag Manager Tracking Code -->
+    <span id="body-start-placeholder"></span>
+    <script>
+      fetchComponents("./components/body-start.html").then((code) => {
+        const p = document.getElementById("body-start-placeholder");
+        p.insertAdjacentHTML("beforebegin", code);
+        p.remove();
+      });
+    </script>
+    <header>
+      <span id="header-placeholder"></span>
+      <script>
+        fetchComponents("./components/header.html").then((code) => {
+          const p = document.getElementById("header-placeholder");
+          p.insertAdjacentHTML("beforebegin", code);
+          p.remove();
+        });
+      </script>
+    </header>
+    
+
+    <main></main>
+    <footer>
+      <div class="center-container">
+        <div class="center">
+          <div class="center-city">
+            <span class="material-symbols-outlined">location_city</span
+            >Ahmedabad
+          </div>
+          <div class="center-contact">
+            <span class="material-symbols-outlined">home</span>202/203,
+            Vishwanath Northview, besides Regional Passport Office, University
+            Rd, Ahmedabad - 380009
+          </div>
+          <!--
+          <div class="center-phone-email"> -->
+            <a href="tel:7041774887" class="center-contact">
+              <span class="material-symbols-outlined">phone_in_talk</span
+              >7041774887
+            </a>
+            <a href="mailto:ahmedabad@imsindia.com" class="center-contact">
+              <span class="material-symbols-outlined">mail</span
+              >ahmedabad@imsindia.com
+            </a>
+            <!--
+          </div> -->
+        </div>
+      </div>
+      <div class="nav-container">
+        <div class="nav-items-container">
+          <a href="" class="nav-menu">Programs</a>
+          <a href="" class="nav-submenu">CAT</a>
+          <a href="" class="nav-submenu">CMAT, NMAT, SNAP</a>
+          <a href="" class="nav-submenu">IPMAT</a>
+          <a href="" class="nav-submenu">CLAT</a>
+        </div>
+        <div class="nav-items-container">
+          <a href="" class="nav-menu">IMS Centers</a>
+          <a href="" class="nav-submenu">IMS Ahmedabad</a>
+          <a href="" class="nav-submenu">IMS Vadodara</a>
+          <a href="" class="nav-submenu">IMS Surat</a>
+          <a href="" class="nav-submenu">IMS Gandhinagar</a>
+        </div>
+        <div class="nav-items-container">
+          <a href="" class="nav-menu">Student Support</a>
+          <a href="" class="nav-submenu">Leave Application</a>
+          <a href="" class="nav-submenu">Doubt Solving Session</a>
+          <a href="" class="nav-submenu">Profile Building</a>
+        </div>
+        <div class="nav-items-container single-nav-items-container">
+          <a href="" class="nav-menu">Blogs</a>
+          <a href="" class="nav-menu">Enquiry</a>
+        </div>
+        <div class="social">
+          <div class="social-text">Get In Touch</div>
+          <div class="social-icons">
+            <a href="" class="fa-brands fa-facebook-f"></a>
+            <a href="" class="fa-brands fa-instagram"></a>
+            <a href="" class="fa-brands fa-youtube"></a>
+            <a href="" class="fa-brands fa-linkedin-in"></a>
+          </div>
+        </div>
+      </div>
+      <div class="copyright">
+        © IMS Learning Resources Pvt. Ltd.
+      </div>
+    </footer>
+
+    <script src="./assets/js/header.js" defer></script>
+  </body>
+</html>
