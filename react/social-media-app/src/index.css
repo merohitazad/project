@@ -1,0 +1,72 @@
+/* Header */
+
+.header {
+  padding-top: 20px;
+}
+
+.nav-links {
+  color: black;
+  font-weight: 400;
+  text-decoration: none;
+}
+
+.nav-links:hover {
+  color: blue;
+}
+
+.login-button, .signup-button {
+  width: 100px;
+}
+
+.line {
+  margin-top: 20px;
+}
+
+/* Side Bar */
+
+.side-bar-link {
+  padding-left: 50px;
+}
+
+.create-post-link {
+  margin-bottom: 350px;
+}
+
+/* Home */
+
+.content {
+  display: flex;
+}
+
+.post-list {
+  width: 100%;
+  margin: 10px 50px;
+  
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.spinner {
+  padding: 100px 300px;
+}
+
+.welcome-message {
+  width: 100%;
+  margin: 20px 0px 0px 150px;
+}
+
+.post {
+  width: 60%;
+  padding: 10px;
+}
+
+/* Create Post */
+
+.create-post {
+  padding: 25px;
+}
+
+.create-post-input {
+  width: 500px;
+  border: 1px solid rgb(214, 209, 209);
+}

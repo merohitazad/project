@@ -1,0 +1,40 @@
+<header class="bg-red-500 text-white shadow-md">
+  <!-- 🔴 Navbar -->
+  <nav>
+    <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+      <!-- Logo -->
+      <a href="/" class="text-xl font-bold flex justify-center items-center"
+        >Airbnb</a
+      >
+
+      <!-- Nav Links -->
+      <div class="space-x-6 font-medium px-6">
+        <a
+          href="/home"
+          class="px-6 py-1 rounded-lg <%= typeof currentPage !== 'undefined' && currentPage === 'home' ? 'bg-red-400' : 'hover:underline' %>"
+          >Homes</a
+        >
+        <a
+          href="/bookings"
+          class="px-6 py-1 rounded-lg <%= typeof currentPage !== 'undefined' && currentPage === 'bookings' ? 'bg-red-400' : 'hover:underline' %>"
+          >Bookings</a
+        >
+        <a
+          href="/favourites"
+          class="px-6 py-1 rounded-lg <%= typeof currentPage !== 'undefined' && currentPage === 'favourites' ? 'bg-red-400' : 'hover:underline' %>"
+          >Favourites</a
+        >
+        <a
+          href="/host/host-home-list"
+          class="px-6 py-1 rounded-lg <%= typeof currentPage !== 'undefined' && currentPage === 'hostHomes' ? 'bg-red-400' : 'hover:underline' %>"
+          >Host Homes</a
+        >
+        <a
+          href="/host/add-home"
+          class="px-6 py-1 rounded-lg <%= typeof currentPage !== 'undefined' && currentPage === 'addHome' ? 'bg-red-400' : 'hover:underline' %>"
+          >Add Home</a
+        >
+      </div>
+    </div>
+  </nav>
+</header>

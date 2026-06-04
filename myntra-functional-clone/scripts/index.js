@@ -2,8 +2,8 @@ let bagItems;
 onLoad();
 
 function onLoad() {
-  let bagItemsStr = localStorage.getItem('bagItems');
-  bagItems = bagItemsStr ? JSON.parse(bagItemsStr) : []; 
+  let bagItemsStr = localStorage.getItem("bagItems");
+  bagItems = bagItemsStr ? JSON.parse(bagItemsStr) : [];
   displayItemOnHomePage();
   displayBagIcon();
 }
@@ -20,7 +20,7 @@ function displayBagIcon() {
 
 function addToBag(itemId) {
   bagItems.push(itemId);
-  localStorage.setItem('bagItems', JSON.stringify(bagItems));
+  localStorage.setItem("bagItems", JSON.stringify(bagItems));
   displayBagIcon();
 }
 
@@ -50,20 +50,18 @@ function displayItemOnHomePage() {
   itemsContainerElement.innerHTML = innerHTML;
 }
 
-const productPage = document.querySelectorAll('.product-item-display');
-let productPageItem = JSON.parse(localStorage.getItem("Product Page Item")) || [];
+const productPage = document.querySelectorAll(".product-item-display");
+let productPageItem =
+  JSON.parse(localStorage.getItem("Product Page Item")) || [];
 
 // productPage.forEach(el => {
 //   el.addEventListener("click", (e) => {
 //     const id = Number(el.dataset.id);
 //     productPageItem = [];
 //     productPageItem.push(id);
-//     console.log("Clicked item id:", id);
 //     localStorage.setItem("Product Page Item",JSON.stringify(productPageItem));
 //   });
 // });
-
-// let selectedItem = items.find(item => item.id == productPageItem[0]);
 
 productPage.forEach((el) => {
   el.addEventListener("click", (e) => {
@@ -86,3 +84,5 @@ productPage.forEach((el) => {
     window.location.href = productURL;
   });
 });
+
+// let selectedItem = items.find(item => item.id == productPageItem[0]);

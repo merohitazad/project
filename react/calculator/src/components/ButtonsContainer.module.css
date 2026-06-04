@@ -1,0 +1,23 @@
+.buttonContainer {
+  padding: 0 20px;
+
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.button {
+  border: 1px solid rgb(182, 175, 175);
+  border-radius: 5px;
+  width: 26%;
+  aspect-ratio: 1/1;
+  margin: 8px 0;
+  font-size: 30px;
+  padding: 0;
+  font-weight: 400;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <script src="../../assets/js/load-components.js"></script>
+  <script id="head-placeholder"></script>
+  <script>
+    fetchComponentsHtml("../../components/head.html", "head-placeholder");
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IMS Gujarat | Blogs</title>
+  <meta name="description"
+    content="Aiming for top scores in CAT, IPMAT or CMAT? IMS Gujarat offers expert mentors, structured programs and proven results. Visit us and begin your journey with confidence." />
+  <!-- Fav Icon -->
+  <link rel="icon" type="image/png" href="../../assets/images/others/favicon.png" />
+
+  <!-- Google Font Link -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0&icon=menu"
+    rel="stylesheet" />
+  <!-- Awesome Font Link -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="../../assets/css/header.css" />
+  <link rel="stylesheet" href="../../assets/css/footer.css" />
+  <link rel="stylesheet" href="../../assets/css/homepage.css" />
+  <link rel="stylesheet" href="../../assets/css/blogs.css" />
+</head>
+
+<body>
+  <!-- For Google Tag Manager Tracking Code -->
+  <span id="body-start-placeholder"></span>
+  <script>
+    fetchComponentsHtml(
+      "../../components/body-start.html",
+      "body-start-placeholder"
+    );
+  </script>
+  <header>
+    <span id="header-placeholder"></span>
+    <script>
+      fetchComponentsHtml(
+        "../../components/header.html",
+        "header-placeholder"
+      );
+    </script>
+  </header>
+
+  <main>
+    <!-- ===== BLOG MAIN SECTION ===== -->
+    <section class="blog-main">
+      <!-- FILTER BAR -->
+      <div class="filter-bar">
+        <div class="filter-text">
+          <h1>Latest from the Blog</h1>
+          <p>Filter by category to find posts you want.</p>
+        </div>
+
+        <!-- Desktop Buttons -->
+        <div class="filter-buttons">
+          <button class="category-btn" data-category="ALL" aria-pressed="true">
+            ALL
+          </button>
+          <button class="category-btn" data-category="CAT">CAT</button>
+          <button class="category-btn" data-category="CMAT">
+            CMAT
+          </button>
+          <button class="category-btn" data-category="IPMAT">
+            IPMAT
+          </button>
+          <button class="category-btn" data-category="CLAT">
+            CLAT
+          </button>
+        </div>
+      </div>
+
+      <!-- BLOG CARDS -->
+      <div class="posts">
+        <!-- CARD 1 -->
+        <a href="crack-cat-12-month-study-plan-1.html" target="_blank" class="blog-card" data-category="CAT">
+          <img src="../../assets/images/faculties/ahmedabad/cat/aakash-mali.jpg" alt="Blog Image" />
+          <div class="content">
+            <h3>A Complete Roadmap to Crack CAT with a 12-Month Study Plan</h3>
+            <p>Learn how to crack CAT with a 12-Month study plan</p>
+            <div class="bottom-row">
+              <div class="badge">CAT</div>
+              <span>Read →</span>
+            </div>
+          </div>
+        </a>
+
+      </div>
+
+      <!-- No Results Text -->
+      <div class="no-results">No posts match this category.</div>
+
+      <!-- Pagination (below posts) -->
+      <div id="pagination-bottom" class="pagination-container" aria-label="Blog pagination"></div>
+    </section>
+  </main>
+  <footer>
+    <span id="footer-placeholder"></span>
+    <script>
+      fetchComponentsHtml(
+        "../../components/footer.html",
+        "footer-placeholder"
+      );
+    </script>
+  </footer>
+
+  <script src="../../assets/js/header.js" defer></script>
+  <!-- Filter Script -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const buttons = Array.from(document.querySelectorAll(".category-btn"));
+      const cards = Array.from(document.querySelectorAll(".blog-card"));
+      const noResults = document.querySelector(".no-results");
+
+      function normalize(val) {
+        return (val || "ALL").toUpperCase();
+      }
+
+      function showNoResults(show) {
+        if (noResults) noResults.style.display = show ? "block" : "none";
+      }
+
+      function filterPosts(category = "ALL") {
+        const cat = normalize(category);
+        let visible = 0;
+
+        cards.forEach(card => {
+          const cardCat = normalize(card.dataset.category);
+          const match = cat === "ALL" || cardCat === cat;
+          card.style.display = match ? "" : "none";
+          if (match) visible++;
+        });
+
+        showNoResults(visible === 0);
+
+        // notify pagination
+        window.dispatchEvent(new Event("postsFiltered"));
+      }
+
+      // 🔑 expose globally (THIS IS THE KEY FIX)
+      window.filterPosts = filterPosts;
+
+      function setActiveButton(activeBtn) {
+        buttons.forEach(btn => {
+          const isActive = btn === activeBtn;
+          btn.setAttribute("aria-pressed", String(isActive));
+          btn.classList.toggle("active", isActive);
+          btn.classList.toggle("inactive", !isActive);
+        });
+      }
+
+      buttons.forEach(btn => {
+        btn.addEventListener("click", () => {
+          setActiveButton(btn);
+          filterPosts(btn.dataset.category || "ALL");
+        });
+      });
+
+      if (buttons.length) setActiveButton(buttons[0]);
+      filterPosts("ALL");
+    });
+  </script>
+  <!-- Pagination Script -->
+  <script>
+    (function () {
+      const PER_PAGE = 6;
+
+      function init() {
+        const grid = document.querySelector(".posts");
+        if (!grid) return;
+
+        const allCards = Array.from(grid.querySelectorAll(".blog-card"));
+        const top = document.getElementById("pagination-top");
+        const bottom = document.getElementById("pagination-bottom");
+
+        let visibleCards = [];
+        let currentPage = 1;
+        let totalPages = 1;
+
+        function collectVisibleCards() {
+          visibleCards = allCards.filter(
+            c => c.style.display !== "none"
+          );
+          totalPages = Math.ceil(visibleCards.length / PER_PAGE) || 1;
+          currentPage = 1;
+        }
+
+        function hideAllCards() {
+          allCards.forEach(c => (c.style.display = "none"));
+        }
+
+        function renderPage(page) {
+          currentPage = Math.min(Math.max(1, page), totalPages);
+          hideAllCards();
+
+          const start = (currentPage - 1) * PER_PAGE;
+          const end = start + PER_PAGE;
+
+          visibleCards.slice(start, end).forEach(
+            c => (c.style.display = "")
+          );
+
+          renderPagination(top);
+          renderPagination(bottom);
+        }
+
+        function renderPagination(container) {
+          if (!container) return;
+          container.innerHTML = "";
+
+          if (totalPages <= 1) {
+            container.style.display = "none";
+            return;
+          }
+
+          container.style.display = "";
+
+          const prev = document.createElement("button");
+          prev.textContent = "‹ Prev";
+          prev.disabled = currentPage === 1;
+          prev.onclick = () => renderPage(currentPage - 1);
+          container.appendChild(prev);
+
+          for (let i = 1; i <= totalPages; i++) {
+            const btn = document.createElement("button");
+            btn.textContent = i;
+            if (i === currentPage) btn.setAttribute("aria-current", "true");
+            btn.onclick = () => renderPage(i);
+            container.appendChild(btn);
+          }
+
+          const next = document.createElement("button");
+          next.textContent = "Next ›";
+          next.disabled = currentPage === totalPages;
+          next.onclick = () => renderPage(currentPage + 1);
+          container.appendChild(next);
+        }
+
+        function applyPagination() {
+          collectVisibleCards();
+          if (visibleCards.length === 0) {
+            if (top) top.style.display = "none";
+            if (bottom) bottom.style.display = "none";
+            return;
+          }
+          renderPage(1);
+        }
+
+        // Initial run
+        applyPagination();
+
+        // 🔑 sync with filter
+        window.addEventListener("postsFiltered", applyPagination);
+      }
+
+      document.readyState === "loading"
+        ? document.addEventListener("DOMContentLoaded", init)
+        : init();
+    })();
+  </script>
+  <!-- Embed Mode Script -->
+  <script>
+    function hideElements(selector) {
+      if (!selector) return;
+      document.querySelectorAll(selector).forEach(el => {
+        el.style.setProperty("display", "none", "important");
+        el.style.setProperty("visibility", "hidden", "important");
+        el.style.setProperty("height", "0", "important");
+        el.style.setProperty("margin", "0", "important");
+        el.style.setProperty("padding", "0", "important");
+      });
+    }
+
+    function applyExtraCss(cssText) {
+      if (!cssText) return;
+      const styleEl = document.createElement("style");
+      styleEl.id = "embed-extra-style";
+      styleEl.textContent = cssText;
+      document.head.appendChild(styleEl);
+    }
+
+    function getValidCategories() {
+      return Array.from(
+        new Set(
+          Array.from(document.querySelectorAll(".blog-card"))
+            .map(c => (c.dataset.category || "").toUpperCase())
+            .filter(Boolean)
+        )
+      );
+    }
+
+    function normalizeCategory(cat) {
+      const valid = getValidCategories();
+      const c = (cat || "ALL").toUpperCase();
+      return c === "ALL" || valid.includes(c) ? c : "ALL";
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("embed") !== "true") return;
+
+      hideElements("header, footer, .filter-text, .filter-buttons, .content p, .badge");
+
+      applyExtraCss(`
+      main { margin-top: 0 !important; }
+      .bottom-row { justify-content: center !important; }
+    `);
+
+      const requestedCategory = params.get("embedCategory");
+      const category = normalizeCategory(requestedCategory);
+
+      // Apply filter safely
+      if (typeof window.filterPosts === "function") {
+        window.filterPosts(category);
+      } else {
+        // Safety fallback (rare)
+        window.addEventListener("DOMContentLoaded", () => {
+          if (typeof window.filterPosts === "function") {
+            window.filterPosts(category);
+          }
+        });
+      }
+    });
+  </script>
+</body>
+
+</html>

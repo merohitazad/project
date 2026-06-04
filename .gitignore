@@ -1,0 +1,9 @@
+# Ignore all node_modules folders anywhere in the project
+**/node_modules/
+
+# Ignore all environment files anywhere in the project
+**/.env.development
+**/.env.production
+**/.env
+
+projects.rar

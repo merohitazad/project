@@ -1,0 +1,42 @@
+# Dependency directories (Never push these, they are huge)
+node_modules/
+jspm_packages/
+
+# Secrets and Environment Variables (Keeps your MongoDB URL safe!)
+.env
+.env.local
+.env.development
+.env.production
+.env.test
+
+# DO NOT ignore the template file so others know what variables to use
+!.env.example
+
+# Debug logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Diagnostic reports
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# Optional: Local MongoDB data directory 
+# (Only relevant if you run MongoDB locally and save data inside your project folder)
+data/db/
+
+# IDEs and Text Editors
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Operating System files
+.DS_Store
+.DS_Store?
+Thumbs.db

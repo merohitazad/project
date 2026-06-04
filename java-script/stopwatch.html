@@ -7,8 +7,8 @@
     <style>
       body {
         margin: 0px;
-      }
-
+      }   
+      
       main {
         display: flex;
         flex-direction: column;
@@ -47,18 +47,16 @@
       .clear-button:hover {
         background-color: rgb(209, 64, 64);
       }
-
+      
       @media (max-width: 800px) {
         main {
-          width: 90%;
-          margin: 5%;
+          width: 100%;
         }
 
         h1 {
-          font-size: 2.4rem;
+          font-size: 2rem;
         }
       }
-
     </style>
   </head>
   <body>
@@ -81,12 +79,12 @@
       startButtonElement.addEventListener("click", () => {
         clicks++;
         if (clicks % 2 == 1) {
-          startButtonElement.innerText = "Stop";
-          startButtonElement.style.backgroundColor = "tomato";
+          document.querySelector("#start-button").innerText = "Stop";
+          document.querySelector("#start-button").style.backgroundColor = "tomato";
           startTimer();
         } else {
-          startButtonElement.innerText = "Start";
-          startButtonElement.style.backgroundColor = "lightgreen";
+          document.querySelector("#start-button").innerText = "Start";
+          document.querySelector("#start-button").style.backgroundColor = "lightgreen";
           stopTimer();
         }
       });
@@ -107,7 +105,7 @@
         clearInterval(intervalID);
         document.querySelector("input").value = "";
         startButtonElement.innerText = "Start";
-        startButtonElement.style.backgroundColor = "lightgreen";
+        document.querySelector("#start-button").style.backgroundColor = "lightgreen";
         start = 0;
         clicks = 0;
         elapsed = 0;

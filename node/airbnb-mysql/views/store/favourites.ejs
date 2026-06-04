@@ -1,0 +1,69 @@
+<%- include("../partials/head") %>
+
+  <body class="bg-gray-100">
+    <%- include("../partials/header") %>
+
+      <!-- Main Container -->
+      <main class="max-w-6xl mx-auto p-6">
+
+        <!-- Heading -->
+        <h2 class="text-center text-red-500 text-2xl font-semibold mb-8">
+          Here are our favourites homes:
+        </h2>
+
+        <!-- Homes List Container -->
+        <div class="bg-gray-100 p-4 rounded-xl">
+
+          <% if (favouriteHomes.length===0) { %>
+            <p class="text-gray-500 text-center">No homes added yet.</p>
+            <% } else { %>
+
+              <!-- Grid Layout -->
+              <ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+
+                <% favouriteHomes.forEach(home=> { %>
+
+                  <li
+                    class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition duration-300 border border-gray-400">
+                    <a href="/homes/<%= home._id %>">
+                    <!-- Image -->
+                    <img src="<%= home.imageLink %>" alt="home image" class="w-full h-48 object-cover">
+
+                    <!-- Content -->
+                    <div class="p-4 space-y-2">
+
+                      <h3 class="text-lg font-semibold text-gray-800">
+                        <%= home.houseName %>
+                      </h3>
+
+                      <p class="text-gray-600">
+                        📍 <%= home.location %>
+                      </p>
+
+                      <p class="text-gray-600">
+                        💰 ₹<%= home.pricePerNight %> / night
+                      </p>
+
+                      <p class="text-yellow-500 font-medium">
+                        ⭐ <%= home.rating %>
+                      </p>
+                      
+
+                    </div>
+                  </a>
+                <form action="/favourites/delete/<%= home._id %>" method="POST">
+                      <button class="bg-red-500 rounded-lg m-2 px-2 py-1 font-medium w-20">Delete</button></form>
+                  </li>
+
+                  <% }) %>
+
+              </ul>
+
+              <% } %>
+
+        </div>
+
+      </main>
+  </body>
+
+  </html>

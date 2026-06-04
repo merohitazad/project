@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <script src="../../assets/js/load-components.js"></script>
+  <script id="head-placeholder"></script>
+  <script>
+    fetchComponentsHtml("../../components/head.html", "head-placeholder");
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IMS Gujarat | #1 Coaching Center Of Gujarat</title>
+  <meta name="description"
+    content="Aiming for top scores in CAT, IPMAT or CMAT? IMS Gujarat offers expert mentors, structured programs and proven results. Visit us and begin your journey with confidence." />
+  <!-- Fav Icon -->
+  <link rel="icon" type="image/png" href="../../assets/images/others/favicon.png" />
+
+  <!-- Google Font Link -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0&icon=menu"
+    rel="stylesheet" />
+  <!-- Awesome Font Link -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="../../assets/css/header.css" />
+  <link rel="stylesheet" href="../../assets/css/footer.css" />
+  <link rel="stylesheet" href="../../assets/css/homepage.css" />
+</head>
+
+<body>
+  <!-- For Google Tag Manager Tracking Code -->
+  <span id="body-start-placeholder"></span>
+  <script>
+    fetchComponentsHtml("../../components/body-start.html", "body-start-placeholder");
+  </script>
+  <header>
+    <span id="header-placeholder"></span>
+    <script>
+      fetchComponentsHtml("../../components/header.html", "header-placeholder");
+    </script>
+  </header>
+  <main>
+
+  </main>
+  <footer>
+    <span id="footer-placeholder"></span>
+    <script>
+      fetchComponentsHtml("../../components/footer.html", "footer-placeholder");
+    </script>
+  </footer>
+
+  <script src="../../assets/js/header.js" defer></script>
+  <script src="../../assets/js/slider-function.js"></script>
+  <script>
+    // call the script only when slider function is loaded
+    createAutoSlider(".faculties-cards-container", ".faculty-card", {
+      intervalSeconds: 4,
+      smoothDurationMs: 600,
+      debug: false,
+    });
+    createAutoSlider(".reviews-cards-container", ".review-card", {
+      intervalSeconds: 5,
+      smoothDurationMs: 600,
+      debug: false,
+    });
+  </script>
+</body>
+
+</html>

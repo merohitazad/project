@@ -1,0 +1,672 @@
+main {
+  margin-top: 12vh;
+}
+
+/* ===== Common CSS For Every Section ===== */
+
+section {
+  background: #ffffff;
+  width: 88%;
+  margin: 0 6%;
+  padding: 25px 0%;
+}
+
+.header-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.section-badge {
+  background: #bfdbfe;
+  color: #000;
+  font-weight: 600;
+  padding: 8px 18px;
+  border-radius: 30px;
+  border: 2px solid #60a5fa;
+  cursor: default;
+  font-size: 20px;
+}
+
+.section-title {
+  width: 100%;
+  font-size: 40px;
+  font-weight: 700;
+  margin: 20px 0;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.header-container p {
+  max-width: 700px;
+  margin-bottom: 20px;
+  font-size: 18px;
+  color: #4b5563;
+  text-align: center;
+}
+
+.content-container {
+  margin-top: 10px;
+}
+
+/* ===== Common CSS For Every Card ===== */
+
+.card {
+  background: #dbeafe;
+  border: 1px solid #93c5fd;
+  padding: 25px;
+  border-radius: 12px;
+  width: calc(33.33% - 25px);
+  min-width: 280px;
+  transition: transform 0.25s ease;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+.card-header {
+  width: 100%;
+  margin-bottom: 15px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-header h3 {
+  width: 80%;
+  font-size: 1.4rem;
+  color: #1e3a8a;
+
+  text-align: left;
+}
+
+.card p {
+  width: 100%;
+  color: #374151;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* ===== Hero Section ===== */
+
+.hero-container {
+  padding-top: 0;
+}
+
+.hero {
+  padding: 10px 0 20px 0;
+  background: #fff;
+}
+
+.hero-card {
+  background: #dbeafe;
+  padding: 4%;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(16, 24, 40, 0.08);
+  position: relative;
+  overflow: visible;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 48%;
+  gap: 4%;
+  align-items: center;
+}
+
+.hero-left {
+  max-width: 100%;
+}
+
+.intro {
+  color: #6b7280;
+  font-size: 1.05rem;
+}
+
+.hero-title {
+  font-size: 3rem;
+  line-height: 1.05;
+  padding: 12px 0;
+  font-weight: 700;
+}
+
+.hero-left h2 {
+  font-size: 2.5rem;
+}
+
+.actions {
+  margin-top: 18px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.btn-primary {
+  display: inline-block;
+  background: #2563eb;
+  color: white;
+  text-decoration: none;
+  padding: 12px 20px;
+  border-radius: 999px;
+  font-size: 1.05rem;
+  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.18);
+  transition: transform 0.12s ease, background 0.12s ease;
+}
+
+.btn-primary:hover {
+  background: #1d4ed8;
+  transform: translateY(-2px);
+}
+
+.stat-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: white;
+  padding: 10px 14px;
+  border-radius: 999px;
+  box-shadow: 0 4px 12px rgba(2, 6, 23, 0.06);
+  font-size: 0.95rem;
+}
+
+.stat-pill .rating {
+  display: inline-flex;
+  gap: 0.5rem;
+  align-items: center;
+  color: #b45309;
+}
+
+.stat-pill .students {
+  font-weight: 700;
+}
+
+.mentor-img {
+  max-width: 460px;
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 10px;
+  object-fit: cover;
+  animation: fadeUp 0.6s ease both;
+}
+
+.video-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(2, 6, 23, 0.06);
+  overflow: hidden;
+}
+
+.form-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(2, 6, 23, 0.06);
+  overflow: hidden;
+}
+
+.video-header {
+  background: blue;
+  color: white;
+  font-weight: 700;
+  font-size: 1.5rem;
+  padding: 10px 16px;
+  text-align: center;
+}
+
+.video-grid {
+  padding: 12px;
+  display: grid;
+  background-color: white;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.video-wrap {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  overflow: hidden;
+  position: relative;
+}
+
+.video-wrap iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.btn-primary:focus,
+.btn-primary:active {
+  outline: 3px solid rgba(37, 99, 235, 0.16);
+  outline-offset: 2px;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== About US Section ===== */
+
+.about-flex {
+  margin-top: 10px;
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.about-flex p {
+  text-align: left;
+  padding-bottom: 15px;
+  font-size: 18px;
+}
+
+.about-left {
+  width: 45%;
+  margin-left: 2%;
+}
+
+.about-right {
+  width: 50%;
+}
+
+.about-text {
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 25px;
+}
+
+.about-list {
+  list-style: disc;
+  padding-left: 20px;
+  margin-bottom: 20px;
+}
+
+.about-list li {
+  margin-bottom: 6px;
+}
+
+.about-review {
+  margin: 20px 0;
+}
+
+.review-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #fff;
+  padding: 12px 14px;
+  border-radius: 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  width: fit-content;
+}
+
+.review-icon {
+  width: 35px;
+  height: 35px;
+}
+
+.review-title {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.review-sub {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* Google Icon HTML Commented CSS Start */
+
+.about-btn {
+  display: inline-block;
+  background: #2563eb;
+  color: #ffffff;
+  padding: 12px 22px;
+  border-radius: 30px;
+  font-size: 18px;
+  text-decoration: none;
+  margin-top: 10px;
+  transition: background 0.2s;
+}
+
+.about-btn:hover {
+  background: #1d4ed8;
+}
+
+/* Google Icon HTML Commented CSS End */
+
+.about-right {
+  flex: 1;
+  min-width: 300px;
+  display: flex;
+  justify-content: center;
+}
+
+.about-img {
+  width: 100%;
+  max-width: 380px;
+  object-fit: contain;
+}
+
+/* ===== Why IMS Section ===== */
+
+.flex-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 25px;
+  justify-content: center;
+}
+
+.icon {
+  width: 20%;
+  font-size: 2rem;
+  color: #3b82f6;
+}
+
+/* ===== Faculties Section ===== */
+
+.faculties-cards-container {
+  display: flex;
+  overflow: hidden;
+}
+
+.faculties-title {
+  margin-bottom: 10px;
+}
+
+.faculty-card {
+  width: 23%;
+  margin: 10px 1%;
+  display: inline-block;
+}
+
+.faculty-card-container {
+  background: #ffffff;
+  border-radius: 14px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.25s ease;
+  padding-bottom: 15px;
+}
+
+.faculty-card-container:hover {
+  transform: scale(1.05);
+}
+
+.faculty-card-container:hover .faculty-image-wrapper img {
+  transform: scale(1.05);
+}
+
+.faculty-image-wrapper {
+  aspect-ratio: 4/5;
+  overflow: hidden;
+  background: #f5f5f5;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.faculty-image-wrapper img {
+  height: 100%;
+  width: auto;
+  object-fit: contain;
+  transition: transform 1s ease;
+}
+
+.faculty-name,
+.faculty-role,
+.faculty-exp {
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+.faculty-name {
+  font-size: 1.5rem;
+}
+
+.faculty-role {
+  font-size: 1.2rem;
+}
+
+.faculty-exp {
+  font-size: 1.2rem;
+}
+
+/* ===== Facilities Section ===== */
+
+.facilities-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.facilities-icon {
+  width: 15%;
+}
+
+.facilities-icon i {
+  font-size: 2rem;
+  color: #1e3a8a;
+}
+
+.facility-title {
+  padding: 10px;
+}
+
+.card-header img {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  object-fit: cover;
+  background: white;
+}
+
+/* ===== Review Section ===== */
+
+.reviews-cards-container {
+    display: flex;
+    overflow-x: hidden; 
+    padding:  0;
+    box-sizing: border-box;
+}
+
+.reviews-cards-container > .review-card {
+    flex: 0 0 calc((100% - 6%) / 3); 
+    margin: 1%;
+    box-sizing: border-box;
+    width: unset !important;
+}
+
+.review-card {
+  width: auto !important;
+  display: block;
+  background-color: white;
+  border: 1px solid black;
+}
+
+.image-wrapper {
+  width: 35%;
+  aspect-ratio: 1/1;
+  position: relative;
+  overflow: hidden;      
+  border-radius: 50%;   
+}
+
+.image-wrapper img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;          
+  height: 100%;          
+  object-fit: cover;    
+  object-position: center; 
+}
+
+.student-details {
+  width: 60%;
+  font-size: 1rem;
+  font-weight: 600;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.student-name {
+  font-size: 1.1rem;
+  padding-bottom: 10px;
+  font-weight: bold;
+}
+
+/* ===== Mobile Version ===== */
+
+@media (max-width: 900px) {
+
+  /* Common Css For Every Section */
+
+  /* Common Css For Every Card */
+
+  .card {
+    width: 100%;
+  }
+
+  .card:hover {
+    transform: none;
+  }
+
+  /* Hero Section */
+
+  .hero {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  .hero-title {
+    font-size: 2rem;
+  }
+
+  .actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn-primary {
+    width: 100%;
+    text-align: center;
+  }
+
+  .stat-pill {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .video-card {
+    display: none;
+  }
+
+  .hero-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* About Us Section */
+
+  .section-title {
+    font-size: 1.8rem;
+  }
+
+  .about-flex {
+    flex-direction: column;
+    text-align: left;
+    gap: 0;
+  }
+
+  .about-left {
+    width: 100%;
+  }
+
+  .about-img {
+    max-width: 300px;
+    margin-top: 20px;
+  }
+
+  /* Why IMS Section */
+
+  /* Faculty Section */
+
+  .faculty-card {
+    width: 99.5%;
+  }
+
+  .faculty-card-container:hover {
+    transform: none;
+  }
+
+  .faculties-title {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  /* Facilities Section */
+
+  .card-header img {
+    width: 80px;
+    height: 80px;
+  }
+
+  /* Review Section */
+
+  .reviews-cards-container > .review-card {
+    flex: 0 0 100%; 
+    margin: 0; 
+  }
+
+  .review-card {
+    background-color: white;
+    border-color: white;
+    padding: 5px;
+  }
+
+  .review-card .card-header {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .image-wrapper {
+    width: 60%;
+  }
+
+  .image-wrapper img {
+    width: 100%;
+    height: 100%;
+  }
+
+  .student-details {
+    width: 100%;
+    margin-top: 20px;
+    align-items: center;
+  }
+}
+
+
+

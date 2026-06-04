@@ -1,0 +1,9 @@
+.item {
+  width: 100%;
+  font-size: 25px;
+  color: blue;
+}
+
+.buyButton {
+  float: right;
+}

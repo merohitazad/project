@@ -1,597 +1,551 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Rohit Kumar - Performance Marketer</title>
-    <meta
-      name="description"
-      content="Rohit Kumar - Performance marketer skilled in ppc, analytics, and growth marketing. Explore his portfolio and connect to grow your brand today!"
-    />
-    <style>
-      :root {
-        --bg: #ffffff;
-        --text: #0b1220;
-        --muted: #546078;
-        --accent: #0b84ff;
-        --glass: #f6f9ff;
-        --radius: 12px;
-        --container: 920px;
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Rohit Kumar - Performance Marketer</title>
+  <meta name="description"
+    content="Rohit Kumar - Performance marketer skilled in ppc, analytics, and growth marketing. Explore his portfolio and connect to grow your brand today!" />
+  <style>
+    :root {
+      --bg: #ffffff;
+      --text: #0b1220;
+      --muted: #546078;
+      --accent: #0b84ff;
+      --glass: #f6f9ff;
+      --radius: 12px;
+      --container: 920px;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-size: 16px;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto,
+        Helvetica, Arial;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto,
+        Helvetica, Arial;
+      color: var(--text);
+      background: #f7fbff;
+      padding: 0 8%;
+    }
+
+    header {
+      width: 84%;
+      height: 15vh;
+      background-color: white;
+      position: fixed;
+
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand {
+      width: 40%;
+      display: flex;
+      align-items: center;
+      gap: 25px;
+    }
+
+    .logo {
+      width: 80px;
+      height: 80px;
+      border: 0px solid;
+      border-radius: 60px;
+      margin-left: 4%;
+      place-items: center;
+      background-image: url("./rohit-kumar.jpg");
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-color: #f5f5f5;
+    }
+
+    .name {
+      margin-left: 5%;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 1.3rem;
+    }
+
+    h3 {
+      margin: 0;
+      font-size: 1.1rem;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    nav {
+      width: 40%;
+      display: flex;
+      justify-content: end;
+    }
+
+    nav a {
+      width: 25%;
+      color: var(--muted);
+      text-decoration: none;
+      font-weight: 600;
+      align-content: end;
+      display: inline-block;
+      text-align: end;
+    }
+
+    .grid {
+      padding-top: 16vh;
+
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 18px;
+    }
+
+    .card {
+      background: white;
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: 0 6px 18px rgba(16, 40, 80, 0.06);
+    }
+
+    .section-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .contact-list {
+      list-style: none;
+      padding: 0;
+      margin: 8px 0 0;
+    }
+
+    .contact-list li {
+      margin: 6px 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .experience-item {
+      margin-bottom: 12px;
+    }
+
+    .company-and-tenure {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .kraftshala {
+      font-weight: 600;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .job-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .skills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .skill {
+      background: var(--glass);
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 13px;
+    }
+
+    a.link {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .projects ul {
+      list-style: disc;
+      padding-left: 18px;
+      margin: 8px 0 0;
+    }
+
+    footer {
+      margin: 18px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    @media (max-width: 800px) {
+      .grid {
+        grid-template-columns: 1fr;
       }
 
-      * {
-        box-sizing: border-box;
-        font-size: 16px;
-        font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto,
-          Helvetica, Arial;
+      .logo {
+        height: 70%;
+        margin-left: 6%;
+        margin-top: 0px;
       }
 
       body {
         margin: 0;
-        font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto,
-          Helvetica, Arial;
-        color: var(--text);
-        background: #f7fbff;
-        padding: 0 8%;
-      }
-
-      header {
-        width: 84%;
-        height: 15vh;
-        background-color: white;
-        position: fixed;
-
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 12px;
-      }
-
-      .brand {
-        width: 40%;
-        display: flex;
-        align-items: center;
-        gap: 25px;
-      }
-
-      .logo {
-        width: 80px;
-        height: 80px;
-        border: 0px solid;
-        border-radius: 60px;
-        margin-left: 4%;
-        place-items: center;
-        background-image: url("./rohit_kumar.jpg");
-        background-size: contain;
-        background-repeat: no-repeat;
-        background-position: center;
-        background-color: #f5f5f5;
-      }
-
-      .name {
-        margin-left: 5%;
-      }
-
-      h1 {
-        margin: 0;
-        font-size: 1.5rem;
-      }
-
-      h2 {
-        margin: 0;
-        font-size: 1.3rem;
-      }
-
-      h3 {
-        margin: 0;
-        font-size: 1.1rem;
-      }
-
-      .muted {
-        color: var(--muted);
+        padding: 0;
       }
 
       nav {
-        width: 40%;
-        display: flex;
-        justify-content: end;
+        display: none;
       }
 
-      nav a {
-        width: 25%;
-        color: var(--muted);
-        text-decoration: none;
-        font-weight: 600;
-        align-content: end;
-        display: inline-block;
-        text-align: end;
+      header {
+        width: 100%;
+        height: 16vh;
       }
 
-      .grid {
-        padding-top: 16vh;
-
-        display: grid;
-        grid-template-columns: 1fr 320px;
-        gap: 18px;
-      }
-
-      .card {
-        background: white;
-        border-radius: var(--radius);
-        padding: 16px;
-        box-shadow: 0 6px 18px rgba(16, 40, 80, 0.06);
-      }
-
-      .section-title {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-
-      .contact-list {
-        list-style: none;
-        padding: 0;
-        margin: 8px 0 0;
-      }
-
-      .contact-list li {
-        margin: 6px 0;
-        color: var(--muted);
-        font-size: 14px;
-      }
-
-      .experience-item {
-        margin-bottom: 12px;
+      .brand {
+        width: 100%;
+        height: 100%;
       }
 
       .company-and-tenure {
-        display: flex;
-        justify-content: space-between;
-        align-items: baseline;
+        display: block;
+        margin-bottom: 10px;
       }
 
       .kraftshala {
-        font-weight: 600;
-        margin-bottom: 10px;
-        display: flex;
-        justify-content: space-between;
+        display: block;
       }
+    }
+  </style>
+</head>
 
-      .job-meta {
-        display: flex;
-        justify-content: space-between;
-        gap: 12px;
-        font-size: 13px;
-        color: var(--muted);
-      }
-
-      .skills {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        margin-top: 8px;
-      }
-
-      .skill {
-        background: var(--glass);
-        padding: 6px 10px;
-        border-radius: 999px;
-        font-weight: 600;
-        font-size: 13px;
-      }
-
-      a.link {
-        color: var(--accent);
-        text-decoration: none;
-      }
-
-      .projects ul {
-        list-style: disc;
-        padding-left: 18px;
-        margin: 8px 0 0;
-      }
-
-      footer {
-        margin: 18px;
-        text-align: center;
-        color: var(--muted);
-        font-size: 13px;
-      }
-
-      @media (max-width: 800px) {
-        .grid {
-          grid-template-columns: 1fr;
-        }
-
-        .logo {
-          height: 65%;
-          margin-left: 6%;
-          margin-top: 0px;
-        }
-
-        body {
-          margin: 0;
-          padding: 0;
-        }
-
-        nav {
-          display: none;
-        }
-
-        header  {
-          width: 100%;
-          height: 16vh;
-        }
-
-        .brand {
-          width: 100%;
-          height: 100%;
-        }
-
-        .company-and-tenure {
-          display: block;
-          margin-bottom: 10px;
-        }
-
-        .kraftshala {
-          display: block;
-        }
-      }
-    </style>
-  </head>
-
-  <body>
-    <header>
-      <div class="brand">
-        <div class="logo"></div>
-        <div class="name">
-          <h1>Rohit Kumar</h1>
-          <div class="muted">Performance Marketer</div>
-        </div>
+<body>
+  <header>
+    <div class="brand">
+      <div class="logo"></div>
+      <div class="name">
+        <h1>Rohit Kumar</h1>
+        <div class="muted">Performance Marketer</div>
       </div>
-      <nav>
-        <a href="#work">Work</a>
-        <a href="#projects">Projects</a>
-        <a href="#education">Education</a>
-        <a href="#contact">Contact</a>
-      </nav>
-    </header>
+    </div>
+    <nav>
+      <a href="#work">Work</a>
+      <a href="#projects">Projects</a>
+      <a href="#education">Education</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
 
-    <div class="grid">
-      <main>
-        <section class="card">
-          <div class="section-title">
-            <div>
-              <h2>About</h2>
-            </div>
+  <div class="grid">
+    <main>
+      <section class="card">
+        <div class="section-title">
+          <div>
+            <h2>About</h2>
           </div>
-          <p class="muted" style="margin-top: 10px">
-            I’m a data-driven performance marketer with hands-on experience
-            running and optimising paid media across Facebook, Google, Amazon
-            and marketplaces. I specialise in building measurable funnels that
-            improve ROAS and scale revenue. Previously worked across D2C and B2B
-            lead gen.
-          </p>
-        </section>
-        <section id="work" class="card" style="margin-top: 14px">
-          <div class="section-title">
-            <h2>Professional Experience</h2>
-          </div>
+        </div>
+        <p class="muted" style="margin-top: 10px">
+          I’m a data-driven performance marketer with hands-on experience
+          running and optimising paid media across Facebook, Google, Amazon
+          and marketplaces. I specialise in building measurable funnels that
+          improve ROAS and scale revenue. Previously worked across D2C and B2B
+          lead gen.
+        </p>
+      </section>
+      <section id="work" class="card" style="margin-top: 14px">
+        <div class="section-title">
+          <h2>Professional Experience</h2>
+        </div>
 
-          <div class="experience-item">
-            <div class="company-and-tenure">
-              <h3>Digital Marketing Manager - De’Dzines, Kanpur</h3>
-              <div class="muted">May 2023 - May 2025</div>
-            </div>
-            <div class="job-meta">
-              <div class="muted">Managed paid media & marketplaces</div>
-            </div>
-            <ul style="margin: 8px 0 0; color: var(--muted)">
-              <li>
-                Managed Facebook, Google, Amazon & Flipkart ads; generated
-                ~₹5,00,000/month.
-              </li>
-              <li>
-                Managed inventory, improved product listings (A+ content) and
-                on‑page SEO to lift organic visibility.
-              </li>
-            </ul>
+        <div class="experience-item">
+          <div class="company-and-tenure">
+            <h3>Digital Marketing Manager - De’Dzines, Kanpur</h3>
+            <div class="muted">May 2023 - May 2025</div>
           </div>
+          <div class="job-meta">
+            <div class="muted">Managed paid media & marketplaces</div>
+          </div>
+          <ul style="margin: 8px 0 0; color: var(--muted)">
+            <li>
+              Managed Facebook, Google, Amazon & Flipkart ads; generated
+              ~₹5,00,000/month.
+            </li>
+            <li>
+              Managed inventory, improved product listings (A+ content) and
+              on‑page SEO to lift organic visibility.
+            </li>
+          </ul>
+        </div>
 
-          <div class="experience-item">
-            <div class="company-and-tenure">
-              <h3>Facebook Campaign Manager - Realty Assistant, Noida</h3>
-              <div class="muted">Jun 2022 - May 2023</div>
-            </div>
-            <div class="job-meta">
-              <div class="muted">Scaled lead-gen across cities</div>
-            </div>
-            <ul style="margin: 8px 0 0; color: var(--muted)">
-              <li>Managed >₹1 Cr budget across 5 cities on Facebook Ads.</li>
-              <li>
-                Built cross-functional processes with creative & tech teams;
-                launched landing-page source yielding high-quality leads.
-              </li>
-            </ul>
+        <div class="experience-item">
+          <div class="company-and-tenure">
+            <h3>Facebook Campaign Manager - Realty Assistant, Noida</h3>
+            <div class="muted">Jun 2022 - May 2023</div>
           </div>
+          <div class="job-meta">
+            <div class="muted">Scaled lead-gen across cities</div>
+          </div>
+          <ul style="margin: 8px 0 0; color: var(--muted)">
+            <li>Managed >₹1 Cr budget across 5 cities on Facebook Ads.</li>
+            <li>
+              Built cross-functional processes with creative & tech teams;
+              launched landing-page source yielding high-quality leads.
+            </li>
+          </ul>
+        </div>
 
-          <div class="experience-item">
-            <div class="company-and-tenure">
-              <h3>Digital Media Intern - Atomberg Technologies, Navi Mumbai</h3>
-              <div class="muted">Apr 2022 - Jun 2022</div>
-            </div>
-            <div class="job-meta">
-              <div class="muted">Campaign analysis & recommendations</div>
-            </div>
-            <ul style="margin: 8px 0 0; color: var(--muted)">
-              <li>
-                Analysed campaigns across Facebook, Google, Flipkart, Amazon &
-                GA; proposed strategies that can increase revenue by ~10%.
-              </li>
-              <li>
-                Completed
-                <a
-                  href="https://docs.google.com/presentation/d/1QOc31wi-UWFhgx_O5tIru6ii1m__53whHfvh-tExmGE/edit?usp=sharing"
-                  style="text-decoration: none; color: #0b84ff"
-                  >Quarterly Business Review</a
-                >
-                internship project ahead of schedule.
-              </li>
-            </ul>
+        <div class="experience-item">
+          <div class="company-and-tenure">
+            <h3>Digital Media Intern - Atomberg Technologies, Navi Mumbai</h3>
+            <div class="muted">Apr 2022 - Jun 2022</div>
           </div>
+          <div class="job-meta">
+            <div class="muted">Campaign analysis & recommendations</div>
+          </div>
+          <ul style="margin: 8px 0 0; color: var(--muted)">
+            <li>
+              Analysed campaigns across Facebook, Google, Flipkart, Amazon &
+              GA; proposed strategies that can increase revenue by ~10%.
+            </li>
+            <li>
+              Completed
+              <a href="https://docs.google.com/presentation/d/1QOc31wi-UWFhgx_O5tIru6ii1m__53whHfvh-tExmGE/edit?usp=sharing"
+                style="text-decoration: none; color: #0b84ff">Quarterly Business Review</a>
+              internship project ahead of schedule.
+            </li>
+          </ul>
+        </div>
 
-          <div class="experience-item">
-            <div class="company-and-tenure">
-              <h3>Business Analyst - Eprofitzone, Bangalore</h3>
-              <div class="muted">Nov 2020 - Nov 2021</div>
-            </div>
-            <div class="job-meta">
-              <div class="muted">Sales & consulting</div>
-            </div>
-            <ul style="margin: 8px 0 0; color: var(--muted)">
-              <li>
-                Generated revenue ~₹8,00,000 through daily lead follow-ups (125+
-                leads/day) and consulted 150+ clients on investments.
-              </li>
-            </ul>
+        <div class="experience-item">
+          <div class="company-and-tenure">
+            <h3>Business Analyst - Eprofitzone, Bangalore</h3>
+            <div class="muted">Nov 2020 - Nov 2021</div>
           </div>
-        </section>
-        <section id="education" class="card" style="margin-top: 14px">
-          <!-- Section Title -->
-          <div class="section-title">
-            <h2>Education & Training</h2>
+          <div class="job-meta">
+            <div class="muted">Sales & consulting</div>
           </div>
+          <ul style="margin: 8px 0 0; color: var(--muted)">
+            <li>
+              Generated revenue ~₹8,00,000 through daily lead follow-ups (125+
+              leads/day) and consulted 150+ clients on investments.
+            </li>
+          </ul>
+        </div>
+      </section>
+      <section id="education" class="card" style="margin-top: 14px">
+        <!-- Section Title -->
+        <div class="section-title">
+          <h2>Education & Training</h2>
+        </div>
 
-          <!-- 1️⃣ Formal Education -->
-          <div style="margin-top: 8px">
-            <h4 style="font-weight: 700; margin-bottom: 8px">
-              Formal Education
-            </h4>
-            <table
-              style="
+        <!-- 1️⃣ Formal Education -->
+        <div style="margin-top: 8px">
+          <h4 style="font-weight: 700; margin-bottom: 8px">
+            Formal Education
+          </h4>
+          <table style="
                 width: 100%;
                 border-collapse: collapse;
                 color: var(--muted);
                 font-size: 0.95rem;
                 text-align: center;
-              "
-            >
-              <thead
-                style="
+              ">
+            <thead style="
                   text-align: center;
                   border-bottom: 1px solid var(--border-color);
-                "
-              >
-                <tr>
-                  <th style="padding: 6px 0">Year</th>
-                  <th style="padding: 6px 0">Degree</th>
-                  <th style="padding: 6px 0">Institute</th>
-                  <th style="padding: 6px 0">CGPA / %</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td style="padding: 6px 0">2016 - 2020</td>
-                  <td style="padding: 6px 0">B.Tech (Mechanical)</td>
-                  <td style="padding: 6px 0">NIT Patna</td>
-                  <td style="padding: 6px 0">6.59</td>
-                </tr>
-                <tr>
-                  <td style="padding: 6px 0">2013 - 2015</td>
-                  <td style="padding: 6px 0">Senior School</td>
-                  <td style="padding: 6px 0">Adarsh Vikash Vidyalaya, Patna</td>
-                  <td style="padding: 6px 0">90.8%</td>
-                </tr>
-                <tr>
-                  <td style="padding: 6px 0">2011 - 2013</td>
-                  <td style="padding: 6px 0">Secondary School</td>
-                  <td style="padding: 6px 0">B.P. Convent School, Patna</td>
-                  <td style="padding: 6px 0">93.1%</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+                ">
+              <tr>
+                <th style="padding: 6px 0">Year</th>
+                <th style="padding: 6px 0">Degree</th>
+                <th style="padding: 6px 0">Institute</th>
+                <th style="padding: 6px 0">CGPA / %</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="padding: 6px 0">2016 - 2020</td>
+                <td style="padding: 6px 0">B.Tech (Mechanical)</td>
+                <td style="padding: 6px 0">NIT Patna</td>
+                <td style="padding: 6px 0">6.59</td>
+              </tr>
+              <tr>
+                <td style="padding: 6px 0">2013 - 2015</td>
+                <td style="padding: 6px 0">Senior School</td>
+                <td style="padding: 6px 0">Adarsh Vikash Vidyalaya, Patna</td>
+                <td style="padding: 6px 0">90.8%</td>
+              </tr>
+              <tr>
+                <td style="padding: 6px 0">2011 - 2013</td>
+                <td style="padding: 6px 0">Secondary School</td>
+                <td style="padding: 6px 0">B.P. Convent School, Patna</td>
+                <td style="padding: 6px 0">93.1%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
-          <!-- 2️⃣ Digital Marketing Course -->
-          <div style="margin-top: 20px">
-            <h4 style="font-weight: 700; margin-bottom: 6px">
-              Professional Training
-            </h4>
-            <div class="kraftshala">
-              Digital Marketing - The Marketing Launchpad (Kraftshala)
-              <div>Nov 2021 - Mar 2022</div>
-            </div>
-            <div class="muted" style="color: var(--muted); font-size: 0.95rem">
-              ~500 hours of hands-on training across modules:
-              <strong
-                >SEO, Facebook Ads, Google Ads, YouTube Ads, Amazon Ads, Google
-                Analytics</strong
-              >
-              <br />
-              <span style="display: block; margin-top: 4px">
-                <strong>MS Excel / Google Sheets:</strong> operators, formulas,
-                pivot tables, vlookups
-              </span>
-            </div>
+        <!-- 2️⃣ Digital Marketing Course -->
+        <div style="margin-top: 20px">
+          <h4 style="font-weight: 700; margin-bottom: 6px">
+            Professional Training
+          </h4>
+          <div class="kraftshala">
+            Digital Marketing - The Marketing Launchpad (Kraftshala)
+            <div>Nov 2021 - Mar 2022</div>
           </div>
-        </section>
-
-        <section class="card" style="margin-top: 14px">
-          <div class="section-title">
-            <h2>Certificates & Achievements</h2>
+          <div class="muted" style="color: var(--muted); font-size: 0.95rem">
+            ~500 hours of hands-on training across modules:
+            <strong>SEO, Facebook Ads, Google Ads, YouTube Ads, Amazon Ads, Google
+              Analytics</strong>
+            <br />
+            <span style="display: block; margin-top: 4px">
+              <strong>MS Excel / Google Sheets:</strong> operators, formulas,
+              pivot tables, vlookups
+            </span>
           </div>
-          <ul style="margin-top: 8px; color: var(--muted)">
-            <li>All India Rank 14763 - JEE Advanced</li>
-            <li>Workshop on "Yoga for Happiness" - ISKCON Bangalore</li>
-            <li>Certified blood donor (social responsibility)</li>
-            <li>
-              Industrial internship training - Carriage Repair Workshop, Harnaut
-            </li>
-            <li>
-              Millionaires Matchmaker Course - Mahadevan Share Sense (technical
-              analysis of stocks)
-            </li>
-          </ul>
-        </section>
-      </main>
+        </div>
+      </section>
 
-      <aside>
-        <section id="contact" class="card">
-          <div class="section-title">
-            <h2>Contact</h2>
+      <section class="card" style="margin-top: 14px">
+        <div class="section-title">
+          <h2>Certificates & Achievements</h2>
+        </div>
+        <ul style="margin-top: 8px; color: var(--muted)">
+          <li>All India Rank 14763 - JEE Advanced</li>
+          <li>Workshop on "Yoga for Happiness" - ISKCON Bangalore</li>
+          <li>Certified blood donor (social responsibility)</li>
+          <li>
+            Industrial internship training - Carriage Repair Workshop, Harnaut
+          </li>
+          <li>
+            Millionaires Matchmaker Course - Mahadevan Share Sense (technical
+            analysis of stocks)
+          </li>
+        </ul>
+      </section>
+    </main>
+
+    <aside>
+      <section id="contact" class="card">
+        <div class="section-title">
+          <h2>Contact</h2>
+        </div>
+        <ul class="contact-list">
+          <li style="display: flex; gap: 5px">
+            <h3>Email:</h3>
+            <a class="link" href="mailto:merohitazad2802@gmail.com">merohitazad2802@gmail.com</a>
+          </li>
+          <li style="display: flex; gap: 5px">
+            <h3>Phone:</h3>
+            <a class="link" href="tel:+918210829513">+91 8210829513</a>
+          </li>
+          <li style="display: flex; gap: 5px">
+            <h3>LinkedIn:</h3>
+            <a class="link" href="https://www.linkedin.com/in/merohitazad/"
+              target="_blank">linkedin.com/in/merohitazad</a>
+          </li>
+          <li style="display: flex; gap: 5px">
+            <h3>GitHub:</h3>
+            <a class="link" href="https://github.com/merohitazad" target="_blank">github.com/merohitazad</a>
+          </li>
+        </ul>
+
+        <div style="margin-top: 12px">
+          <h2>Location</h2>
+          <div class="muted" style="margin-top: 6px">
+            Permanent: Vill - Bishunpur, Post - Sarsar, Dist. - Siwan, Bihar -
+            841226<br>Temporary: Gulbai Tekra, Ahmedabad, Gujarat
           </div>
-          <ul class="contact-list">
-            <li style="display: flex; gap: 5px">
-              <h3>Email:</h3>
-              <a class="link" href="mailto:merohitazad2802@gmail.com"
-                >merohitazad2802@gmail.com</a
-              >
-            </li>
-            <li style="display: flex; gap: 5px">
-              <h3>Phone:</h3>
-              <a class="link" href="tel:+918210829513">+91 8210829513</a>
-            </li>
-            <li style="display: flex; gap: 5px">
-              <h3>LinkedIn:</h3>
-              <a
-                class="link"
-                href="https://www.linkedin.com/in/merohitazad/"
-                target="_blank"
-                >linkedin.com/in/merohitazad</a
-              >
-            </li>
-            <li style="display: flex; gap: 5px">
-              <h3>GitHub:</h3>
-              <a
-                class="link"
-                href="https://github.com/merohitazad"
-                target="_blank"
-                >github.com/merohitazad</a
-              >
-            </li>
-          </ul>
+        </div>
 
-          <div style="margin-top: 12px">
-            <h2>Location</h2>
-            <div class="muted" style="margin-top: 6px">
-              Permanent: Vill - Bishunpur, Post - Sarsar, Dist. - Siwan, Bihar -
-              841226<br>Temporary: Gulbai Tekra, Ahmedabad, Gujarat
-            </div>
+        <div style="margin-top: 12px">
+          <h2>Skills & Tools</h2>
+          <div class="skills">
+            <span class="skill">Google Ads</span>
+            <span class="skill">Meta Ads</span>
+            <span class="skill">Amazon & Flipkart</span>
+            <span class="skill">GA4 </span>
+            <span class="skill">Looker Studio</span>
+            <span class="skill">Excel / Sheets</span>
+            <span class="skill">Landing pages</span>
           </div>
+        </div>
 
-          <div style="margin-top: 12px">
-            <h2>Skills & Tools</h2>
-            <div class="skills">
-              <span class="skill">Google Ads</span>
-              <span class="skill">Meta Ads</span>
-              <span class="skill">Amazon & Flipkart</span>
-              <span class="skill">GA4 </span>
-              <span class="skill">Looker Studio</span>
-              <span class="skill">Excel / Sheets</span>
-              <span class="skill">Landing pages</span>
-            </div>
-          </div>
+        <div style="margin-top: 12px">
+          <h2>Other Interests</h2>
+          <div class="muted">Gardening</div>
+        </div>
+      </section>
 
-          <div style="margin-top: 12px">
-            <h2>Other Interests</h2>
-            <div class="muted">Gardening</div>
-          </div>
-        </section>
-
-        <section class="card" style="margin-top: 14px">
-          <h2>Short Pitch</h2>
-          <p class="muted" style="margin-top: 8px">
-            If you need a performance-first marketer who can set up reliable
-            measurement, run efficient media and test creatives & landing
-            funnels to improve ROAS.
+      <section class="card" style="margin-top: 14px">
+        <h2>Short Pitch</h2>
+        <p class="muted" style="margin-top: 8px">
+          If you need a performance-first marketer who can set up reliable
+          measurement, run efficient media and test creatives & landing
+          funnels to improve ROAS.
+        </p>
+        <div style="margin-top: 12px">
+          Email me -
+          <a class="link" href="mailto:merohitazad2802@gmail.com">merohitazad2802@gmail.com</a>
+        </div>
+      </section>
+      <section id="projects" class="card" style="margin-top: 14px">
+        <div class="section-title">
+          <h2>GitHub Projects</h2>
+        </div>
+        <div class="projects" style="margin-top: 8px; color: var(--muted)">
+          <p>
+            Front-end practice projects and JS apps hosted on GitHub Pages:
           </p>
-          <div style="margin-top: 12px">
-            Email me -
-            <a class="link" href="mailto:merohitazad2802@gmail.com"
-              >merohitazad2802@gmail.com</a
-            >
-          </div>
-        </section>
-        <section id="projects" class="card" style="margin-top: 14px">
-          <div class="section-title">
-            <h2>GitHub Projects</h2>
-          </div>
-          <div class="projects" style="margin-top: 8px; color: var(--muted)">
-            <p>
-              Front-end practice projects and JS apps hosted on GitHub Pages:
-            </p>
-            <ul>
-              <li>
-                <a
-                  class="link"
-                  href="https://merohitazad.github.io/project/myntra-html-css-clone/mynta.html"
-                  target="_blank"
-                  >Myntra Homepage - HTML & CSS clone</a
-                >
-              </li>
-              <li>
-                <a
-                  class="link"
-                  href="https://merohitazad.github.io/project/myntra-functional-clone/myntrahome.html"
-                  target="_blank"
-                  >Myntra Functional Clone (JS)</a
-                >
-              </li>
-              <li>
-                <a
-                  class="link"
-                  href="https://merohitazad.github.io/project/java-script/stopwatch.html"
-                  target="_blank"
-                  >Stopwatch app</a
-                >,
-                <a
-                  class="link"
-                  href="https://merohitazad.github.io/project/java-script/calculator.html"
-                  target="_blank"
-                  >Calculator</a
-                >,
-                <a
-                  class="link"
-                  href="https://merohitazad.github.io/project/java-script/todo-list-app.html"
-                  target="_blank"
-                  >Todo List</a
-                >,
-                <a
-                  class="link"
-                  href="https://merohitazad.github.io/project/java-script/cricket.html"
-                  target="_blank"
-                  >Bat Ball Stump game</a
-                >
-              </li>
-            </ul>
-            <p style="margin-top: 10px">
-              View full resume (PDF) and code links in the contact panel.
-            </p>
-          </div>
-        </section>
-      </aside>
-    </div>
+          <ul>
+            <li>
+              <a class="link" href="https://merohitazad.github.io/project/myntra-html-css-clone/mynta.html"
+                target="_blank">Myntra Homepage - HTML & CSS clone</a>
+            </li>
+            <li>
+              <a class="link" href="https://merohitazad.github.io/project/myntra-functional-clone/myntrahome.html"
+                target="_blank">Myntra Functional Clone (JS)</a>
+            </li>
+            <li>
+              <a class="link" href="https://merohitazad.github.io/project/java-script/stopwatch.html"
+                target="_blank">Stopwatch app</a>,
+              <a class="link" href="https://merohitazad.github.io/project/java-script/calculator.html"
+                target="_blank">Calculator</a>,
+              <a class="link" href="https://merohitazad.github.io/project/java-script/todo-list-app.html"
+                target="_blank">Todo List</a>,
+              <a class="link" href="https://merohitazad.github.io/project/java-script/cricket.html" target="_blank">Bat
+                Ball Stump game</a>
+            </li>
+          </ul>
+          <p style="margin-top: 10px">
+            View full resume (PDF) and code links in the contact panel.
+          </p>
+        </div>
+      </section>
+    </aside>
+  </div>
 
-    <footer>© Rohit Kumar - Performance Marketer</footer>
-  </body>
+  <footer>© Rohit Kumar - Performance Marketer</footer>
+</body>
+
 </html>

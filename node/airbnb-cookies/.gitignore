@@ -1,0 +1,39 @@
+# Dependencies (Never push this, it's massive)
+node_modules/
+
+# Secrets & Environment Variables 
+.env
+.env.local
+.env.development
+.env.production
+.env.test
+
+# Keep the template safe so you know what keys to use later
+!.env.example
+
+# Local User Uploads (CRITICAL for an Airbnb clone!)
+# If you are saving property/room images locally using Multer, 
+# this prevents your test uploads from flooding your GitHub.
+public/uploads/*
+!public/uploads/.gitkeep
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Mac & Windows system junk
+.DS_Store
+.DS_Store?
+Thumbs.db
+
+# IDES and Editors
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

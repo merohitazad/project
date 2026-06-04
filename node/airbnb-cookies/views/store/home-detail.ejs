@@ -1,0 +1,139 @@
+<%- include("../partials/head") %>
+
+<body class="bg-gray-100">
+  <%- include("../partials/header") %>
+
+  <!-- Main Container -->
+  <main class="max-w-6xl mx-auto px-4 py-4">
+
+    <!-- Heading -->
+    <h2 class="text-center text-3xl font-bold text-gray-800 mb-4">
+      Home Details
+    </h2>
+
+    <% if (!home) { %>
+
+      <!-- No Home Found -->
+      <div class="bg-white border border-gray-300 rounded-2xl shadow-md p-6 text-center">
+        <h3 class="text-2xl font-semibold text-red-500 mb-2">
+          No Home Found
+        </h3>
+
+        <p class="text-gray-500">
+          The requested home does not exist.
+        </p>
+      </div>
+
+    <% } else { %>
+
+      <!-- Home Card -->
+      <div
+        class="bg-white rounded-2xl overflow-hidden shadow-lg border border-gray-200 grid lg:grid-cols-2 gap-4">
+
+        <!-- Left Side Image -->
+        <div>
+          <img
+            src="/<%= home.image %>"
+            alt="Home Image"
+            class="w-full h-[420px] object-cover"
+          >
+        </div>
+
+        <!-- Right Side Content -->
+        <div class="p-5 flex flex-col gap-5">
+
+          <div>
+
+            <!-- Title + Rating -->
+            <div class="flex items-start justify-between mb-3">
+              <h1 class="text-3xl font-bold text-gray-800 leading-tight">
+                <%= home.houseName %>
+              </h1>
+
+              <span
+                class="bg-yellow-400 text-gray-900 font-semibold px-3 py-1 rounded-xl text-sm">
+                ⭐ <%= home.rating %>
+              </span>
+            </div>
+
+            <!-- Location -->
+            <p class="text-gray-600 text-lg mb-4">
+              📍 <%= home.location %>
+            </p>
+
+            <!-- Price -->
+            <div class="mb-3">
+              <span class="text-3xl font-bold text-green-600">
+                ₹<%= home.pricePerNight %>
+              </span>
+
+              <span class="text-gray-500 text-lg">
+                / night
+              </span>
+            </div>
+
+            <!-- Features -->
+            <div class="grid grid-cols-2 gap-3 mb-5">
+
+              <div class="bg-gray-100 rounded-xl">
+                <p class="text-gray-500 text-sm">Guests</p>
+                <p class="font-semibold text-lg">4 Guests</p>
+              </div>
+
+              <div class="bg-gray-100 rounded-xl">
+                <p class="text-gray-500 text-sm">Bedrooms</p>
+                <p class="font-semibold text-lg">2 Bedrooms</p>
+              </div>
+
+              <div class="bg-gray-100 rounded-xl">
+                <p class="text-gray-500 text-sm">Bathrooms</p>
+                <p class="font-semibold text-lg">2 Bathrooms</p>
+              </div>
+
+              <div class="bg-gray-100 rounded-xl">
+                <p class="text-gray-500 text-sm">Wifi</p>
+                <p class="font-semibold text-lg">Free Wifi</p>
+              </div>
+
+            </div>
+
+            <!-- Description -->
+            <div class="mb-3">
+              <h3 class="text-2xl font-semibold text-gray-800 mb-2">
+                About this place
+              </h3>
+
+              <p class="text-gray-600 leading-6 text-sm">
+                Enjoy a comfortable and luxurious stay with modern amenities,
+                beautiful interiors, and a peaceful atmosphere. Perfect for
+                vacations, work trips, and family stays.
+              </p>
+            </div>
+
+          </div>
+
+          <!-- Buttons -->
+          <div class="flex gap-3">
+
+            <button
+              class="bg-green-600 hover:bg-green-700 text-white font-semibold w-44 py-2 px-5 rounded-xl transition duration-300">
+              Book Now
+            </button>
+
+            <button
+              class="bg-blue-600 hover:bg-blue-700 text-white font-semibold w-44 py-2 px-5 rounded-xl transition duration-300">
+              Add to Favourites
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    <% } %>
+
+  </main>
+</body>
+
+</html>

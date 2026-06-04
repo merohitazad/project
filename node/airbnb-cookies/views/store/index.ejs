@@ -1,0 +1,48 @@
+<%- include("../partials/head") %>
+  <body class="bg-gray-100">
+    <%- include("../partials/header") %>
+      <!-- Main Container -->
+      <main class="max-w-6xl mx-auto p-6">
+        <!-- Heading -->
+        <h2 class="text-center text-red-500 text-2xl font-semibold mb-8">
+          Welcome to airbnb
+        </h2>
+        <!-- Homes List Container -->
+        <div class="bg-gray-100 p-4 rounded-xl">
+          <% if (registeredHomes.length===0) { %>
+            <p class="text-gray-500 text-center">No homes added yet.</p>
+            <% } else { %>
+              <!-- Grid Layout -->
+              <ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                <% registeredHomes.forEach(home=> { %>
+                  <li
+                    class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition duration-300 border border-gray-400">
+                    <a href="/homes/<%= home._id %>">
+                    <!-- Image -->
+                    <img src="<%= home.image %>" alt="home image" class="w-full h-48 object-cover">
+                    <!-- Content -->
+                    <div class="p-4 space-y-2">
+                      <h3 class="text-lg font-semibold text-gray-800">
+                        <%= home.houseName %>
+                      </h3>
+                      <p class="text-gray-600">
+                        📍 <%= home.location %>
+                      </p>
+                      <p class="text-gray-600">
+                        💰 ₹<%= home.pricePerNight %> / night
+                      </p>
+                      <p class="text-yellow-500 font-medium">
+                        ⭐ <%= home.rating %>
+                      </p>
+                      
+                    </div></a>
+                    <%- include("../partials/favourite", {home: home}) %>
+                  </li>
+                  <% }) %>
+              </ul>
+              <% } %>
+        </div>
+      </main>
+  </body>
+
+  </html>

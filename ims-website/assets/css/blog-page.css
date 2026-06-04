@@ -1,0 +1,277 @@
+body {
+  line-height: 1.5;
+  background: #ffffff;
+}
+
+footer {
+  line-height: normal;
+}
+
+/* Page container uses flex: content + aside + author stacked */
+
+main {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  flex-wrap: wrap;
+}
+
+/* Article + sidebar layout on wider screens */
+
+.article-and-sidebar {
+  display: flex;
+  gap: 28px;
+}
+
+/* Content section */
+
+.content-section {
+  background: #fff;
+  width: 70%;
+  margin: 0;
+  padding: 20px 3% 20px 7%;
+}
+
+article {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Meta row (date, author, share) */
+
+.meta-row {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  color: #6b7280;
+  font-size: 0.95rem;
+}
+
+.meta-sep {
+  color: #d1d5db;
+}
+
+/* Share row aligns to right on wide screens; on narrow screens it stacks */
+
+.share-row {
+  margin-left: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.share-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  text-decoration: none;
+  color: #ffffff;
+  opacity: 0.95;
+}
+
+.share-btn i {
+  font-size: 1.5rem;
+  transition: all 0.4s ease;
+}
+
+.share-btn i:hover {
+  transform: scale(1.5);
+}
+
+.fa-whatsapp {
+  color: green;
+}
+
+.fa-facebook {
+  color: #0766ff
+}
+
+.fa-linkedin {
+  color: #0a66c2;
+}
+
+/* Article typography */
+
+.article-title {
+  margin: 0;
+  font-size: 2rem;
+  color: #0b1220;
+}
+
+.article article h2 {
+  font-size: 1.5rem;
+}
+
+.lead {
+  margin: 0;
+  color: #374151;
+  font-size: 1.05rem;
+}
+
+/* Images */
+
+.hero-image img,
+.content-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px;
+}
+
+.hero-image figcaption,
+.content-image figcaption {
+  margin-top: 8px;
+  color: #6b7280;
+  font-size: 0.85rem;
+}
+
+/* ===== Aside Section ===== */
+
+aside {
+  width: 30%;
+  padding: 25px 10px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.related-posts-title {
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.5rem;
+  padding: 10px 0;
+}
+
+/* Side cards */
+
+.side-card {
+  width: 100%;
+  margin-bottom: 20px;
+  border: 1px solid #e6e6e6;
+  padding: 14px;
+  border-radius: 8px;
+  background: #fbfbfb;
+}
+
+.btn {
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  background: #0f172a;
+  color: #ffffff;
+}
+
+/* ===== Author section ===== */
+
+.author-section {
+  border-top: 1px solid #e6e6e6;
+  padding: 20px 6%;
+  margin: 0;
+  width: 100%;
+
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.about-author {
+  width: 100%;
+  padding: 20px 0;
+
+  display: flex;
+  justify-content: center;
+}
+
+.author-card {
+  width: 60%;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.author-photo {
+  width: 25%;
+  aspect-ratio: 1/1;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.author-info {
+  width: 70%;
+}
+
+.author-name {
+  display: block;
+  font-size: 1.05rem;
+}
+
+.author-role {
+  display: block;
+  color: #6b7280;
+  margin: 2px 0 10px 0;
+}
+
+.enquiry-form {
+  width: 40%;
+}
+
+@media (max-width: 900px) {
+
+  section {
+    width: 100%;
+  }
+
+  .content-section {
+    width: 100%;
+  }
+
+  .meta-row {
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0;
+  }
+
+  .meta-row > * {
+    padding-bottom: 10px;
+  }
+
+  aside {
+    width: 100%;
+    padding-bottom: 0;
+  }
+
+  .author-section {
+    flex-wrap: wrap;
+    padding-top: 0;
+  }
+
+  .author-card {
+    width: 100%;
+    justify-content: space-around;
+  }
+
+  .author-photo {
+    width: 75%;
+    aspect-ratio: 1/1;
+  }
+
+  .author-info {
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .author-name, .author-role {
+    text-align: center;
+  }
+
+  .enquiry-form {
+    width: 100%;
+  }
+}
