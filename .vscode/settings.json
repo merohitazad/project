@@ -1,8 +1,1 @@
-{
-  "mdb.presetConnections": [
-    {
-      "name": "Preset Connection",
-      "connectionString": "mongodb://merohitazad:Rohit2802@ac-ppbkvpe-shard-00-00.dstuz3y.mongodb.net:27017,ac-ppbkvpe-shard-00-01.dstuz3y.mongodb.net:27017,ac-ppbkvpe-shard-00-02.dstuz3y.mongodb.net:27017/?ssl=true&replicaSet=atlas-q1ihvu-shard-0&authSource=admin&appName=merohitazad"
-    }
-  ],
-}
+
