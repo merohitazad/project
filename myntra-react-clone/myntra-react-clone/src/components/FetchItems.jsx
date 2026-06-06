@@ -14,7 +14,8 @@ const FetchItems = () => {
 
     dispatch(fetchStatusActions.markFetchingStarted());
 
-    fetch("http://localhost:8080/items", { signal })
+    // fetch("http://localhost:8080/items", { signal })
+    fetch("https://curly-guide-jjp947rv6rgxfpq5x-8080.app.github.dev/items", { signal })
       .then((res) => res.json())
       .then(({ items }) => {
         dispatch(itemsActions.addInitialItems(items));

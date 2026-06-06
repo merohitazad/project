@@ -1,10 +1,12 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const cors = require("cors");
 
 const { getStoredItems, storeItems } = require("./data/items");
 
 const app = express();
 
+app.use(cors());
 app.use(bodyParser.json());
 
 app.use((req, res, next) => {
