@@ -8,7 +8,6 @@ import LoadingSpinner from "../components/LoadingSpinner";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
-  
   const fetchStatus = useSelector((store) => store.fetchStatus);
 
   return (
