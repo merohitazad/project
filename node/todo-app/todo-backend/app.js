@@ -13,9 +13,9 @@ const { todoItemsRouter } = require("./routes/todoItemsRouter");
 const rootDir = require("./utils/pathUtil");
 const { authRouter } = require("./routes/authRouter");
 
-// require("dotenv").config({ path: path.join(rootDir, ".env.development") });
-
 const app = express();
+
+app.set('trust proxy', 1);
 
 const MONGODB_URI = process.env.MONGODB_URI;
 const SESSION_SECRET = process.env.SESSION_SECRET;
@@ -26,14 +26,15 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(rootDir, "public")));
 app.use(express.json());
 
-app.use(
-  cors({
-    origin: process.env.CORS_ORIGIN,
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  }),
-);
+const corsOptions = {
+  origin: "https://curly-guide-jjp947rv6rgxfpq5x-5173.app.github.dev",
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  optionsSuccessStatus: 200 
+};
+app.use(cors(corsOptions));
+app.options(/(.*)/, cors(corsOptions));
 
 app.use(
   session({
@@ -46,6 +47,8 @@ app.use(
     cookie: {
       maxAge: 1000 * 60 * 60 * 24, // 1 day
       httpOnly: true,
+      secure: true,       
+      sameSite: "none",  
     },
   }),
 );
