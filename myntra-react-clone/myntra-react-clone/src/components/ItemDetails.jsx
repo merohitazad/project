@@ -14,8 +14,6 @@ const ItemDetails = () => {
   const dispatch = useDispatch();
 
   const bag = useSelector(store => store.bag);
-  
-  // Safely check if item exists in bag only if item is valid data
   const exists = item && item !== "not-found" ? bag.some(id => id === item.id) : false;
 
   useEffect(() => {
@@ -49,7 +47,6 @@ const ItemDetails = () => {
     return addBagItemToServer(id)
       .catch((error) => {
         console.error("Failed to add item to bag:", error);
-        // Rollback state if network fails
         dispatch(bagActions.removeFromBag(id));
       }); 
   };
@@ -59,7 +56,6 @@ const ItemDetails = () => {
     return deleteBagItemFromServer(id)
       .catch((error) => {
         console.error("Failed to remove item from bag:", error);
-        // Rollback state if network fails
         dispatch(bagActions.addBagItems(id));
       });
   };
@@ -250,7 +246,6 @@ const ItemDetails = () => {
     );
   }
 
-  // Safe to read variables now because "item" is confirmed to be a real product object
   const product = item;
   const formattedCount = product.rating?.count >= 1000 
     ? `${(product.rating.count / 1000).toFixed(1)}k` 
@@ -258,7 +253,6 @@ const ItemDetails = () => {
 
   return (
     <div style={styles.card}>
-      {/* LEFT COLUMN: PRODUCT IMAGE & RATING */}
       <div style={styles.imageContainer}>
         <img 
           src={product.image.startsWith('/') ? product.image : `/${product.image}`} 
@@ -273,7 +267,6 @@ const ItemDetails = () => {
         </div>
       </div>
 
-      {/* RIGHT COLUMN: DESCRIPTION & CTA BUTTON */}
       <div style={styles.infoSection}>
         <span style={styles.company}>{product.company}</span>
         <h1 style={styles.itemName}>{product.item_name}</h1>
