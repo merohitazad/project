@@ -34,6 +34,8 @@ const todoItemsReducer = (currTodoItems, action) => {
     newTodoItems = currTodoItems.filter(
       (item) => item.id !== action.payload.itemId
     );
+  } else if (action.type === "UNDO_DELETE") {
+    newTodoItems = sortedItems([action.payload.item, ...currTodoItems]);
   } else if (action.type === "STATUS_ITEM") {
     newTodoItems = currTodoItems.map((item) => {
       if (item.id === action.payload.id) {
@@ -114,20 +116,47 @@ export const TodoItemsContextProvider = ({ children }) => {
   }, [isLoggedIn, loadingAuth]);
 
   const addNewItem = async (itemName, itemDueDate) => {
-    const item = await addItemToServer(itemName, itemDueDate);
-    const newItem = formattedItem(item);
-    dispatchTodoItems({ type: "NEW_ITEM", payload: newItem });
+    const tempId = `temp-${Date.now()}`;
+    const optimisticItem = {
+    id: tempId,
+    name: itemName,
+    dueDate: itemDueDate,
+    completed: false,
+    isSaving: true
+    };
+    const formattedOptimisticItem = formattedItem(optimisticItem);
+    const updatedItem = { ...formattedOptimisticItem, isSaving: true };
+    dispatchTodoItems({ type: "NEW_ITEM", payload: updatedItem });
+    try {      
+      const item = await addItemToServer(itemName, itemDueDate);
+      const newItem = formattedItem(item);
+      dispatchTodoItems({ type: "DELETE_ITEM", payload: { itemId: tempId } });
+      dispatchTodoItems({ type: "NEW_ITEM", payload: newItem });
+    } catch (error) {
+      console.error("Failed to add new item:", error);
+      dispatchTodoItems({ type: "DELETE_ITEM", payload: { itemId: tempId } });
+    }
   };
 
-  const deleteItem = async (id) => {
-    const itemId = await deleteItemFromServer(id);
-    dispatchTodoItems({ type: "DELETE_ITEM", payload: { itemId: itemId } });
+  const deleteItem = async (item) => {
+    dispatchTodoItems({ type: "DELETE_ITEM", payload: { itemId: item.id } });
+    try {
+    await deleteItemFromServer(item.id);
+  } catch (error) {
+    console.error("Server delete failed, rolling back...");
+    dispatchTodoItems({ type: "UNDO_DELETE", payload: { item: item } });
+  }
   };
 
-  const taskCompletionStatus = async (id) => {
-    const item = await itemCompletedStatusOnServer(id);
-    const updatedItem = formattedItem(item);
+  const taskCompletionStatus = async (item) => {
+    const updatedItem = { ...item, completed: !item.completed };
     dispatchTodoItems({ type: "STATUS_ITEM", payload: updatedItem });
+    try {
+    await itemCompletedStatusOnServer(item.id);
+    } catch (error) {
+      console.error("Server status update failed, rolling back...");
+      dispatchTodoItems({ type: "STATUS_ITEM", payload: item });
+    }
   };
 
   return (

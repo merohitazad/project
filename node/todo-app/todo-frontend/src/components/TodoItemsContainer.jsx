@@ -9,10 +9,7 @@ const TodoItemsContainer = () => {
       {todoItems.map((item, index) => (
         <TodoItems
           key={index}
-          id={item.id}
-          todoName={item.name}
-          todoDate={item.dueDate}
-          completed={item.completed}
+          item={item}
         />
       ))}
     </div>
