@@ -8,15 +8,18 @@ import Home from "./routes/Home.jsx";
 import { Provider } from "react-redux";
 import myntraStore from "./store/index.js";
 import ItemDetails from "./components/ItemDetails.jsx";
+import ErrorPage from "./components/ErrorPage.jsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+    errorElement: <ErrorPage />,
     children: [
       { path: "/", element: <Home /> /*, loader: postLoader*/ },
       { path: "/items/:id", element: <ItemDetails /> },
       { path: "/bag", element: <Bag /> /*, action: createPostAction */ },
+      { path: "*", element: <ErrorPage /> },
     ],
   },
 ]);

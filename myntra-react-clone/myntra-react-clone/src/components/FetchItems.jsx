@@ -10,47 +10,58 @@ const FetchItems = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (fetchStatus.fetchDone) return;
+  if (fetchStatus.fetchDone) return;
 
-    const itemsController = new AbortController();
-    const bagController = new AbortController();
+  const itemsController = new AbortController();
+  const bagController = new AbortController();
 
-    dispatch(fetchStatusActions.markFetchingStarted());
+  dispatch(fetchStatusActions.markFetchingStarted());
 
-    // fetch("http://localhost:8080/items", { signal })
-    const fetchCatalogItems = (async () => {
+  const fetchCatalog = async () => {
+    try {
       const items = await getItemsFromServer(itemsController.signal);
-      // console.log("Fetched items from server:", items);
       dispatch(itemsActions.addInitialItems(items));
-    })().catch((err) => {
+    } catch (err) {
       if (err.name !== "AbortError") {
-        console.error("Failed to fetch items:", err);
+        console.error("❌ CRITICAL ERROR IN FETCH CATALOG:", err);
       }
-    });
+      throw err; 
+    }
+  };
 
-    const fetchBagItems = (async () => {
+  const fetchBag = async () => {
+    try {
       const response = await fetch(
         "https://curly-guide-jjp947rv6rgxfpq5x-8080.app.github.dev/bagItems",
         { signal: bagController.signal }
       );
       const { bagItemsId } = await response.json();
       dispatch(bagActions.initialBagItems(bagItemsId));
-    })().catch((err) => {
+    } catch (err) {
       if (err.name !== "AbortError") {
-        console.error("Failed to fetch bag items:", err);
+        console.error("❌ CRITICAL ERROR IN FETCH BAG:", err);
       }
-    });
+      throw err;
+    }
+  };
 
-    Promise.allSettled([fetchCatalogItems, fetchBagItems]).then(() => {
+  Promise.allSettled([fetchCatalog(), fetchBag()])
+    .then((results) => {
+      console.log("Promises settled results:", results);
+    })
+    .catch((err) => {
+      console.error("Something went wrong with allSettled itself:", err);
+    })
+    .finally(() => {
       dispatch(fetchStatusActions.markFetchDone());
       dispatch(fetchStatusActions.markFetchingFinished());
     });
 
-    return () => {
-      itemsController.abort();
-      bagController.abort();
-    };
-  }, [dispatch]); 
+  return () => {
+    itemsController.abort();
+    bagController.abort();
+  };
+}, [dispatch]);
 
   return <></>;
 };

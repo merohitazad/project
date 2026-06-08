@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addBagItemToServer, deleteBagItemFromServer } from "../services/bagService";
 import { bagActions } from "../store/bagSlice";
-import { useParams } from "react-router";
+import { useParams, Link } from "react-router-dom"; // Fixed: Imported Link for the 404 block
 import { getItemDetailsFromServer } from "../services/itemService";
+import LoadingSpinner from "./LoadingSpinner";
 
 const ItemDetails = () => {
-  const [isProcessing, setIsProcessing] = useState(false);
   const [item, setItem] = useState(null);
   
   const { id } = useParams();
@@ -14,7 +14,9 @@ const ItemDetails = () => {
   const dispatch = useDispatch();
 
   const bag = useSelector(store => store.bag);
-  const exists = item ? bag.some(id => id === item.id) : false;
+  
+  // Safely check if item exists in bag only if item is valid data
+  const exists = item && item !== "not-found" ? bag.some(id => id === item.id) : false;
 
   useEffect(() => {
     const controller = new AbortController();
@@ -22,8 +24,13 @@ const ItemDetails = () => {
     const loadItemData = async () => {
       try {
         const data = await getItemDetailsFromServer(itemId, controller.signal);
-        setItem(data);
-        console.log("Fetched item details:", data);
+        if (!data) {
+          setItem("not-found");
+          console.warn(`No details found for item ID: ${itemId}`);
+        } else {
+          setItem(data);
+          console.log("Fetched item details:", data);
+        }
       } catch (error) {
         if (error.name !== "AbortError") {
           console.error("Failed to load product details:", error);
@@ -38,55 +45,35 @@ const ItemDetails = () => {
   }, [itemId]);
 
   const handleAddToBag = (id) => {
+    dispatch(bagActions.addBagItems(id));
     return addBagItemToServer(id)
-      .then((data) => {
-        console.log("Item added to bag successfully:", data); 
-        dispatch(bagActions.addBagItems(id)); 
-      })
       .catch((error) => {
         console.error("Failed to add item to bag:", error);
-        throw error;
+        // Rollback state if network fails
+        dispatch(bagActions.removeFromBag(id));
       }); 
   };
 
   const handleRemoveFromBag = (id) => {
+    dispatch(bagActions.removeFromBag(id));
     return deleteBagItemFromServer(id)
-      .then((data) => {
-        console.log("Item removed from bag successfully:", data);
-        dispatch(bagActions.removeFromBag(id));
-      })
       .catch((error) => {
         console.error("Failed to remove item from bag:", error);
-        throw error;
+        // Rollback state if network fails
+        dispatch(bagActions.addBagItems(id));
       });
   };
 
-  const product = item || {
-    id: "001",
-    image: "images/1.jpg",
-    company: "Carlton London",
-    item_name: "Loading product details...",
-    original_price: 0,
-    current_price: 0,
-    discount_percentage: 0,
-    return_period: 0,
-    delivery_date: "Calculating...",
-    rating: { stars: 0, count: 0 }
-  };
-
   const handleBagAction = async () => {
-    if (!item) return;
-    setIsProcessing(true);
+    if (!item || item === "not-found") return;
     try {
       if (exists) {
-        await handleRemoveFromBag(product.id);
+        await handleRemoveFromBag(item.id);
       } else {
-        await handleAddToBag(product.id);
+        await handleAddToBag(item.id);
       }
     } catch (error) {
       console.error("Action failed:", error);
-    } finally {
-      setIsProcessing(false);
     }
   };
 
@@ -221,7 +208,7 @@ const ItemDetails = () => {
       borderRadius: "8px",
       fontWeight: "700",
       fontSize: "14px",
-      cursor: item ? "pointer" : "not-allowed",
+      cursor: "pointer",
       border: "1px solid transparent",
       display: "flex",
       alignItems: "center",
@@ -229,44 +216,64 @@ const ItemDetails = () => {
       gap: "8px",
       transition: "all 0.15s ease-in-out",
       backgroundColor: exists ? "#ee5050" : "#38b61e",
-      color: exists ? "#ffffff" : "#ffffff",
+      color: "#ffffff",
       borderColor: exists ? "#eb0e28" : "transparent",
-      opacity: item ? 1 : 0.6,
       boxShadow: "0 1px 2px rgba(0,0,0,0.05)",
-    },
-    spinner: {
-      width: "16px",
-      height: "16px",
-      border: "2px solid currentColor",
-      borderTopColor: "transparent",
-      borderRadius: "50%",
     }
   };
+  
+  // Guard Clause 1: If item data is loading, show spinner
+  if (!item) {
+    return <LoadingSpinner />;
+  } 
 
-  const formattedCount = product.rating.count >= 1000 
+  // Guard Clause 2: If the server specifically said item doesn't exist
+  if (item === "not-found") {
+    return ( 
+      <div className="d-flex align-items-center justify-content-center bg-light px-3" style={{ minHeight: "70vh" }}>
+        <div className="w-100 text-center p-5 mt-4 rounded-4 bg-white shadow" style={{ maxWidth: "450px" }}>
+          <div className="display-1 fw-bold text-danger">404</div>
+          <h1 className="mt-3 h3 fw-semibold text-dark">
+            Product Not Found
+          </h1>
+          <p className="mt-3 text-muted">
+            Sorry, the product you're looking for doesn't exist or has been moved.
+          </p>
+          <Link
+            to="/"
+            className="mt-4 btn btn-primary btn-lg px-4 fs-6 fw-medium"
+          >
+            Go Back Home
+          </Link>
+        </div>
+      </div> 
+    );
+  }
+
+  // Safe to read variables now because "item" is confirmed to be a real product object
+  const product = item;
+  const formattedCount = product.rating?.count >= 1000 
     ? `${(product.rating.count / 1000).toFixed(1)}k` 
-    : product.rating.count;
+    : product.rating?.count || 0;
 
   return (
     <div style={styles.card}>
-      {/* LEFT COLUMN */}
+      {/* LEFT COLUMN: PRODUCT IMAGE & RATING */}
       <div style={styles.imageContainer}>
-        {item && (
-          <img 
-            src={product.image.startsWith('/') ? product.image : `/${product.image}`} 
-            alt={product.item_name} 
-            style={styles.image} 
-          />
-        )}
+        <img 
+          src={product.image.startsWith('/') ? product.image : `/${product.image}`} 
+          alt={product.item_name} 
+          style={styles.image} 
+        />
         <div style={styles.ratingBadge}>
           <span style={styles.star}>★</span>
-          <span>{product.rating.stars}</span>
+          <span>{product.rating?.stars || 0}</span>
           <span style={styles.dividerPipe}>|</span>
           <span style={styles.count}>{formattedCount}</span>
         </div>
       </div>
 
-      {/* RIGHT COLUMN */}
+      {/* RIGHT COLUMN: DESCRIPTION & CTA BUTTON */}
       <div style={styles.infoSection}>
         <span style={styles.company}>{product.company}</span>
         <h1 style={styles.itemName}>{product.item_name}</h1>
@@ -290,16 +297,10 @@ const ItemDetails = () => {
 
         <button
           onClick={handleBagAction}
-          disabled={isProcessing || !item}
+          disabled={!item}
           style={styles.button}
         >
-          {isProcessing ? (
-            <div style={styles.spinner} className="animate-spin" />
-          ) : exists ? (
-            "Remove from Bag"
-          ) : (
-            "Add to Bag"
-          )}
+          {exists ? "Remove from Bag" : "Add to Bag"}
         </button>
       </div>
     </div>

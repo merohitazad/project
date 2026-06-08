@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 const Header = () => {
   const bag = useSelector(store => store.bag);
   return (
-    <header>
+    <header style={{ position: "sticky", top: 0, zIndex: 1000 }} className="header">
       <div className="logo_container">
         <Link to="/">
           <img
