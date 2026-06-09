@@ -2,8 +2,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 
-const { getStoredItems, storeItems } = require("./data/items");
-const { getBagItems, addBagItem, deleteBagItem } = require("./data/bag");
+const { getStoredItems, storeItems } = require("./controller/items");
+// const { getBagItems, addBagItem, deleteBagItem } = require("./controller/bag");
 
 const app = express();
 

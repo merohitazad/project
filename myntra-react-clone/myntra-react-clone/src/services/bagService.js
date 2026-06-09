@@ -55,10 +55,8 @@
 //   }
 // };  
 
-// 1. Fetch items from localStorage instead of the server
 export const fetchBagItemsFromServer = async (signal) => {
   try {
-    // We simulate an async operation to keep it compatible with your existing code
     const localBag = localStorage.getItem("myntra_bag");
     const bagItemsId = localBag ? JSON.parse(localBag) : [];
     return bagItemsId;
@@ -68,14 +66,11 @@ export const fetchBagItemsFromServer = async (signal) => {
   }
 };
 
-// 2. Add an item to localStorage instead of sending a POST request
 export const addBagItemToServer = async (itemId) => {
   try {
-    // Get current items, push the new one, and save back
     const localBag = localStorage.getItem("myntra_bag");
     let bagItemsId = localBag ? JSON.parse(localBag) : [];
     
-    // Prevent adding duplicates if you want unique items in the bag
     if (!bagItemsId.includes(itemId)) {
       bagItemsId.push(itemId);
     }
@@ -88,15 +83,12 @@ export const addBagItemToServer = async (itemId) => {
   }
 };
 
-// 3. Remove an item from localStorage instead of sending a DELETE request
 export const deleteBagItemFromServer = async (itemId) => {
   try {
     const localBag = localStorage.getItem("myntra_bag");
     let bagItemsId = localBag ? JSON.parse(localBag) : [];
     
-    // Filter out the item to be removed
     bagItemsId = bagItemsId.filter(id => id !== itemId);
-    
     localStorage.setItem("myntra_bag", JSON.stringify(bagItemsId));
     return { message: "Item removed from bag successfully.", itemId };
   } catch (error) {
