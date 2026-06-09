@@ -29,43 +29,43 @@ app.get("/items", async (req, res) => {
   res.json({ items: storedItems });
 });
 
-app.get("/bagItems", async (req, res) => {
-  try {
-    const bagItems = await getBagItems();
-    res.json({ bagItemsId: bagItems });
-  } catch (error) {
-    console.error("Failed to serve bag items:", error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-});
+// app.get("/bagItems", async (req, res) => {
+//   try {
+//     const bagItems = await getBagItems();
+//     res.json({ bagItemsId: bagItems });
+//   } catch (error) {
+//     console.error("Failed to serve bag items:", error);
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+// });
 
-app.post("/bagItems", async (req, res) => {
-  try {
-    const { itemId } = req.body;
-    if (!itemId) {
-      return res.status(400).json({ error: "Item ID is required" });
-    }
-    await addBagItem(itemId);
-    res.status(200).json({ message: "Item added to bag successfully.", itemId });
-    } catch (error) {
-    console.error("Failed to add item to bag:", error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-});
+// app.post("/bagItems", async (req, res) => {
+//   try {
+//     const { itemId } = req.body;
+//     if (!itemId) {
+//       return res.status(400).json({ error: "Item ID is required" });
+//     }
+//     await addBagItem(itemId);
+//     res.status(200).json({ message: "Item added to bag successfully.", itemId });
+//     } catch (error) {
+//     console.error("Failed to add item to bag:", error);
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+// });
 
-app.delete("/bagItems", async (req, res) => {
-  try {
-    const { itemId } = req.body;
-    if (!itemId) {
-      return res.status(400).json({ error: "Item ID is required" });
-    }
-    await deleteBagItem(itemId);
-    res.status(200).json({ message: "Item removed from bag successfully.", itemId });
-  } catch (error) {
-    console.error("Failed to remove item from bag:", error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-});
+// app.delete("/bagItems", async (req, res) => {
+//   try {
+//     const { itemId } = req.body;
+//     if (!itemId) {
+//       return res.status(400).json({ error: "Item ID is required" });
+//     }
+//     await deleteBagItem(itemId);
+//     res.status(200).json({ message: "Item removed from bag successfully.", itemId });
+//   } catch (error) {
+//     console.error("Failed to remove item from bag:", error);
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+// });
 
 app.get("/items/:id", async (req, res) => {
   const storedItems = await getStoredItems();
@@ -73,17 +73,17 @@ app.get("/items/:id", async (req, res) => {
   res.json({ item });
 });
 
-app.post("/items", async (req, res) => {
-  const existingItems = await getStoredItems();
-  const itemData = req.body;
-  const newItem = {
-    ...itemData,
-    id: Math.random().toString(),
-  };
+// app.post("/items", async (req, res) => {
+//   const existingItems = await getStoredItems();
+//   const itemData = req.body;
+//   const newItem = {
+//     ...itemData,
+//     id: Math.random().toString(),
+//   };
 
-  const updatedItems = [newItem, ...existingItems];
-  await storeItems(updatedItems);
-  res.status(201).json({ message: "Stored new item.", item: newItem });
-});
+//   const updatedItems = [newItem, ...existingItems];
+//   await storeItems(updatedItems);
+//   res.status(201).json({ message: "Stored new item.", item: newItem });
+// });
 
 app.listen(8080);
