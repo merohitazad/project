@@ -27,7 +27,7 @@ app.use(express.static(path.join(rootDir, "public")));
 app.use(express.json());
 
 const corsOptions = {
-  origin: "https://curly-guide-jjp947rv6rgxfpq5x-5173.app.github.dev",
+  origin: CORS_ORIGIN,
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
@@ -60,7 +60,7 @@ mongoose
   .connect(MONGODB_URI)
   .then(() => {
     console.log("Connected to mongodb");
-    app.listen(PORT, () => {
+    app.listen(PORT,"0.0.0.0", () => {
       console.log(`Server running on address http://localhost:${PORT}`);
     });
   })
