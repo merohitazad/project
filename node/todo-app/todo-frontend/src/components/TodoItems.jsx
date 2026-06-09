@@ -42,7 +42,7 @@ function TodoItems({ item }) {
           <button
             type="button"
             onClick={() => deleteItem(item)}
-            disabled={item.isSaving}
+            disabled={item.isSaving || false}
             className="
               w-10 h-10 md:w-12 md:h-12 ml-4
               flex items-center justify-center
