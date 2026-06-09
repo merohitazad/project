@@ -3,10 +3,10 @@ const path = require("path");
 
 // External Module
 const express = require("express");
-const { default: mongoose } = require("mongoose");
 const cors = require("cors");
 const session = require("express-session");
-const MongoStore = require("connect-mongo").default;
+const mongoose = require("mongoose");
+const MongoStore = require("connect-mongo");
 
 // Local Module
 const { todoItemsRouter } = require("./routes/todoItemsRouter");
