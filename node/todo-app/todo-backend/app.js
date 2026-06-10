@@ -44,13 +44,9 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.options(/(.*)/, cors(corsOptions));
 
-let sessionStore;
-if (typeof MongoStore.create === 'function') {
-  sessionStore = MongoStore.create({ mongoUrl: MONGODB_URI });
-} else {
-  const LegacyMongoStore = require("connect-mongo")(session);
-  sessionStore = new LegacyMongoStore({ url: MONGODB_URI });
-}
+const sessionStore = MongoStore.create({ 
+  mongoUrl: MONGODB_URI 
+});
 
 app.use(
   session({
