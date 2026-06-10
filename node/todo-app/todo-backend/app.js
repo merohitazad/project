@@ -47,7 +47,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.options(/(.*)/, cors(corsOptions));
 
-const sessionStore = MongoStore.create({ 
+const sessionStore = new MongoStore({ 
   mongoUrl: MONGODB_URI 
 });
 
