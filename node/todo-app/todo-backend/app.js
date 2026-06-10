@@ -26,11 +26,14 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(rootDir, "public")));
 app.use(express.json());
 
-const allowedPattern = /project-.*\.vercel\.app$/;
-
 const corsOptions = {
   origin: function (origin, callback) {
-    if (!origin || origin === CORS_ORIGIN || allowedPattern.test(origin)) {
+    if (
+      !origin || 
+      origin === CORS_ORIGIN || 
+      origin.endsWith('.vercel.app') || 
+      origin.includes('localhost')
+    ) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
