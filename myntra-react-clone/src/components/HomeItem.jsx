@@ -13,10 +13,6 @@ const HomeItem = ({item}) => {
   const handleAddToBag = () => {
     dispatch(bagActions.addBagItems(item.id));
     addBagItemToServer(item.id)
-      .then((data) => {
-        console.log("Item added to bag successfully:", data); 
-        // dispatch(bagActions.addBagItems(data.itemId));
-      })
       .catch((error) => {
         console.error("Failed to add item to bag:", error);
       }); 
@@ -25,10 +21,6 @@ const HomeItem = ({item}) => {
   const handleRemoveFromBag = () => {
     dispatch(bagActions.removeFromBag(item.id));
     deleteBagItemFromServer(item.id)
-      .then((data) => {
-        console.log("Item removed from bag successfully:", data);
-        // dispatch(bagActions.removeFromBag(data.itemId));
-      })
       .catch((error) => {
         console.error("Failed to remove item from bag:", error);
       });

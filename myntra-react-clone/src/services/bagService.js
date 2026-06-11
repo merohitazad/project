@@ -76,7 +76,7 @@ export const addBagItemToServer = async (itemId) => {
     }
     
     localStorage.setItem("myntra_bag", JSON.stringify(bagItemsId));
-    return { message: "Item added to bag successfully.", itemId };
+    return;
   } catch (error) {
     console.error("Failed to add item to localStorage bag:", error);
     throw error;
@@ -90,7 +90,7 @@ export const deleteBagItemFromServer = async (itemId) => {
     
     bagItemsId = bagItemsId.filter(id => id !== itemId);
     localStorage.setItem("myntra_bag", JSON.stringify(bagItemsId));
-    return { message: "Item removed from bag successfully.", itemId };
+    return;
   } catch (error) {
     console.error("Failed to remove item from localStorage bag:", error);
     throw error;

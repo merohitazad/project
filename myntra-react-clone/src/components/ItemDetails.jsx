@@ -22,10 +22,8 @@ const ItemDetails = () => {
         const data = await getItemDetailsFromServer(itemId);
         if (!data) {
           setItem("not-found");
-          console.warn(`No details found for item ID: ${itemId}`);
         } else {
           setItem(data);
-          console.log("Fetched item details:", data);
         }
       } catch (error) {
         if (error.name !== "AbortError") {
@@ -35,9 +33,6 @@ const ItemDetails = () => {
     };
 
     loadItemData();
-    return () => {
-      controller.abort();
-    };
   }, [itemId]);
 
   const handleAddToBag = (id) => {

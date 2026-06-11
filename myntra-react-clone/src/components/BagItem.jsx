@@ -6,11 +6,8 @@ const BagItem = ({ item }) => {
   const dispatch = useDispatch();
 
   const handleRemoveFromBag = () => {
+    dispatch(bagActions.removeFromBag(item.id));
     deleteBagItemFromServer(item.id)
-      .then((data) => {
-        console.log("Item removed from bag successfully:", data);
-        dispatch(bagActions.removeFromBag(data.itemId));
-      })
       .catch((error) => {
         console.error("Failed to remove item from bag:", error);
       });
