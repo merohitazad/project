@@ -7,7 +7,7 @@ exports.getIndex = (req, res, next) => {
     // console.log("Registered Homes:", registeredHomes);
     res.render("store/index", {
       registeredHomes,
-      pageTitle: "airbnb home",
+      pageTitle: "Airbnb Clone",
       currentPage: "index",
       isLoggedIn: req.session.isLoggedIn,
       user: req.session.user,
@@ -20,7 +20,7 @@ exports.getHomes = (req, res, next) => {
   Home.find().then((registeredHomes) => {
     res.render("store/home-list", {
       registeredHomes,
-      pageTitle: "Airbnb Homes",
+      pageTitle: "Airbnb Clone - Homes",
       currentPage: "home",
       isLoggedIn: req.session.isLoggedIn,
       user: req.session.user,
@@ -37,7 +37,7 @@ exports.getHomeDetails = (req, res, next) => {
     } else {
       res.render("store/home-detail", {
         home,
-        pageTitle: "Home Detail",
+        pageTitle: "Airbnb Clone - Home Detail",
         currentPage: "home",
         isLoggedIn: req.session.isLoggedIn,
         user: req.session.user,
@@ -48,7 +48,7 @@ exports.getHomeDetails = (req, res, next) => {
 
 exports.getBookings = (req, res, next) => {
   res.render("store/bookings", {
-    pageTitle: "My Bookings",
+    pageTitle: "Airbnb Clone - My Bookings",
     currentPage: "bookings",
     isLoggedIn: req.session.isLoggedIn,
     user: req.session.user,
