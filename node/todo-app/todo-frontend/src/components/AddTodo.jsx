@@ -23,24 +23,23 @@ function AddTodo() {
   };
 
   return (
-    <div className="container mx-auto px-4">
+    <div className="container mx-auto px-5 mb-4 md:mb-0 md:px-8">
       <form
         onSubmit={handleAddButtonClicked}
-        // Changed to flex-col on mobile, flex-row on md+
         className="flex flex-col md:flex-row items-stretch md:items-center gap-3 p-4 md:p-5 md:mb-8 bg-white rounded-2xl border border-gray-200 shadow-sm"
       >
         <input
           type="text"
           ref={todoNameElement}
-          placeholder="What needs to be done?"
-          className="flex-1 md:w-44 px-4 py-3 border border-gray-400 rounded-xl text-base transition-all focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+          placeholder="Task..."
+          className="w-full md:w-[1000px] px-4 py-3 border border-gray-400 rounded-xl text-base transition-all focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
         />
 
-        <div className="flex gap-3">
+        <div className="flex flex-1 gap-3">
           <input
-            type="date"
+            type="datetime-local"
             ref={dueDateElement}
-            className="flex-1 md:w-44 h-12 px-3 border border-gray-400 rounded-xl transition-all focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+            className="flex-1 md:w-[150px] h-12 px-3 border border-gray-400 rounded-xl transition-all focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
           />
 
           <button

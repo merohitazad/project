@@ -5,10 +5,12 @@ import { signupUser } from "../services/authService";
 const SignUp = () => {
   const navigate = useNavigate();
 
+  // Added a default "general" string error tracker to the initial state
   const [errors, setErrors] = useState({
     username: "",
     password: [],
     confirmPassword: "",
+    general: "", 
   });
 
   const validateField = (name, value, form) => {
@@ -39,7 +41,12 @@ const SignUp = () => {
   };
 
   const handleChange = (e) => {
-    setErrors((prev) => ({ ...prev, [e.target.name]: e.target.name === "password" ? [] : "" }));
+    // Clear field-specific error AND any active general/conflict error when typing resumes
+    setErrors((prev) => ({ 
+      ...prev, 
+      general: "",
+      [e.target.name]: e.target.name === "password" ? [] : "" 
+    }));
   };
 
   const handleSubmit = async (event) => {
@@ -53,14 +60,21 @@ const SignUp = () => {
     try {
       const response = await signupUser(data);
       const resData = await response.json();
+      
       if (!response.ok) {
         setErrors((prev) => ({ ...prev, general: resData.message || "Signup failed" }));
         return;
       }
+      
       event.target.reset();
       navigate("/login");
     } catch (err) {
       console.error(err);
+      // Handles catching server network level drops or direct HTTP 409 responses from the authService
+      setErrors((prev) => ({ 
+        ...prev, 
+        general: "This email or username is already registered. Please try logging in." 
+      }));
     }
   };
 
@@ -69,8 +83,14 @@ const SignUp = () => {
       <div className="w-full max-w-2xl bg-white px-4 md:p-8 mt-4 rounded-2xl shadow-lg">
         <h1 className="text-3xl font-bold text-center pb-4 md:pb-8">Create Account</h1>
 
+        {/* Global/Conflict Error UI Alert Panel */}
+        {errors.general && (
+          <div className="mb-6 p-4 text-sm text-red-700 bg-red-50 rounded-xl border border-red-200">
+            {errors.general}
+          </div>
+        )}
+
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Mobile: grid-cols-1 | Desktop: grid-cols-2 */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block mb-2 text-gray-700 font-medium">Username</label>
@@ -92,6 +112,7 @@ const SignUp = () => {
                 type="email" 
                 name="email" 
                 placeholder="Enter email"
+                onChange={handleChange} // Added to clear the general error notice if they update email input
                 required 
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg" 
               />
@@ -130,7 +151,7 @@ const SignUp = () => {
             </div>
           </div>
 
-          <button type="submit" className="w-full bg-red-500 text-white py-3 rounded-2xl hover:bg-red-600 transition">
+          <button type="submit" className="w-full bg-red-50 text-white py-3 rounded-2xl bg-red-500 hover:bg-red-600 transition">
             Sign Up
           </button>
         </form>

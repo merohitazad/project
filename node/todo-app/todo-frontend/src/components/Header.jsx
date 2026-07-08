@@ -61,7 +61,7 @@ const Header = () => {
                 to="/"
                 className="text-white no-underline px-3 md:px-6 py-2 rounded-lg font-medium bg-red-600 hover:bg-red-700 transition text-sm md:text-base truncate max-w-25 md:max-w-none"
               >
-                {username || "User Name"}
+                {`Hi ${username || "User Name"} !!`}
               </Link>
 
               <button
