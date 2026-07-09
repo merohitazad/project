@@ -35,6 +35,10 @@ const userSchema = new mongoose.Schema(
       required: true,
     },
     todoList: [todoSchema],
+    pushSubscription: {
+      type: Object,
+      default: null,
+    },
   },
   { timestamps: true },
 );

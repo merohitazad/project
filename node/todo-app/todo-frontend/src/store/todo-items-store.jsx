@@ -7,6 +7,18 @@ import {
 } from "../services/itemsService";
 import { checkAuthStatus } from "../services/authService";
 
+// Helper utility to convert VAPID keys to a compatible Uint8Array format
+function urlBase64ToUint8Array(base64String) {
+  const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
+  const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
+  const rawData = window.atob(base64);
+  const outputArray = new Uint8Array(rawData.length);
+  for (let i = 0; i < rawData.length; ++i) {
+    outputArray[i] = rawData.charCodeAt(i);
+  }
+  return outputArray;
+}
+
 export const TodoItemsContext = createContext({
   todoItems: [],
   addNewItem: () => {},
@@ -62,48 +74,59 @@ export const TodoItemsContextProvider = ({ children }) => {
   const [loadingAuth, setLoadingAuth] = useState(true);
   const [loadingItems, setLoadingItems] = useState(false);
 
-  // --- 1. Request Notification Permission ---
+  // --- AUTOMATIC BACKGROUND WEB PUSH REGISTRATION ---
+  // Runs automatically as soon as the user logs in successfully
   useEffect(() => {
-    if ("Notification" in window && Notification.permission === "default") {
-      Notification.requestPermission();
-    }
-  }, []);
+    if (loadingAuth || !isLoggedIn) return;
 
-  // --- 2. Notification Loop (Using raw values for perfect calculations) ---
-  useEffect(() => {
-    const activeTimeouts = [];
-
-    if (Notification.permission !== "granted") return;
-
-    todoItems.forEach((item) => {
-      if (item.completed || !item.rawDate) return;
-
-      const deadlineTime = new Date(item.rawDate).getTime();
-      const notificationTime = deadlineTime - 2 * 60 * 60 * 1000; // 2 hours before
-      const timeUntilNotification = notificationTime - Date.now();
-
-      if (timeUntilNotification > 0) {
-        const timerId = setTimeout(() => {
-          new Notification("Task Deadline Reminder", {
-            body: `"${item.name}" is due in 2 hours!`,
-            tag: item.id,
-          });
-        }, timeUntilNotification);
-
-        activeTimeouts.push(timerId);
+    const automaticPushSync = async () => {
+      if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
+        console.warn("Push notifications are not natively supported by this browser.");
+        return;
       }
-    });
 
-    return () => {
-      activeTimeouts.forEach((id) => clearTimeout(id));
+      try {
+        // 1. Register sw.js script sitting in your public folder
+        const registration = await navigator.serviceWorker.register("/sw.js");
+        
+        // 2. Automatically prompt user for permission if not granted yet
+        const permission = await Notification.requestPermission();
+        if (permission !== "granted") {
+          console.warn("User has restricted notification permissions.");
+          return;
+        }
+
+        // 3. Generate browser credential tokens mapping to your backend public key
+        // FIXME: Replace this placeholder string with your real PUBLIC_VAPID_KEY from your backend .env
+        const PUBLIC_VAPID_KEY = "YOUR_BACKEND_PUBLIC_VAPID_KEY_HERE"; 
+        
+        const subscription = await registration.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: urlBase64ToUint8Array(PUBLIC_VAPID_KEY),
+        });
+
+        // 4. Sync subscription array object to your updated Render endpoint routes
+        await fetch("/api/todo/save-subscription", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ subscription }),
+        });
+
+        console.log("Automatic push notifications synced and active for user:", username);
+      } catch (error) {
+        console.error("Failed to automatically initialize push updates:", error);
+      }
     };
-  }, [todoItems]);
 
-  // --- 3. Fixed Date Formatting (Keeps UI locked & feeds the timer) ---
+    automaticPushSync();
+  }, [isLoggedIn, loadingAuth, username]);
+
+  // --- Date Formatting Logic ---
   const formattedItem = (item) => {
     if (!item) return null;
 
-    // Remove backend UTC timezone 'Z' to preserve your exact local input string
     let dateStrInput = item.dueDate;
     if (typeof dateStrInput === "string" && dateStrInput.endsWith("Z")) {
       dateStrInput = dateStrInput.slice(0, -1);
@@ -120,9 +143,9 @@ export const TodoItemsContextProvider = ({ children }) => {
     return {
       id: item.id,
       name: item.name,
-      dueDate: dateStr,     // Your UI displays this exact static string
-      dueTime: timeStr,     // Your UI displays this exact static string
-      rawDate: dateStrInput, // Used purely for background calculations so notifications work
+      dueDate: dateStr,     
+      dueTime: timeStr,     
+      rawDate: dateStrInput, 
       completed: item.completed,
     };
   };

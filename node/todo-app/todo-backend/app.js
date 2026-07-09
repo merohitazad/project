@@ -13,6 +13,8 @@ const { todoItemsRouter } = require("./routes/todoItemsRouter");
 const rootDir = require("./utils/pathUtil");
 const { authRouter } = require("./routes/authRouter");
 
+require("./jobs/scheduler");
+
 const app = express();
 
 app.set('trust proxy', 1);
@@ -21,6 +23,9 @@ const MONGODB_URI = process.env.MONGODB_URI;
 const SESSION_SECRET = process.env.SESSION_SECRET;
 const CORS_ORIGIN = process.env.CORS_ORIGIN;
 const PORT = process.env.PORT || 3000;
+
+// Temporary diagnostic log to verify variables load successfully on boot
+console.log("Loaded CORS_ORIGIN target:", CORS_ORIGIN);
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(rootDir, "public")));
@@ -32,7 +37,9 @@ const corsOptions = {
       !origin || 
       origin === CORS_ORIGIN || 
       origin.endsWith('.vercel.app') || 
-      origin.includes('localhost')
+      origin.includes('localhost') ||
+      origin.endsWith('.app.github.dev') || 
+      origin === 'https://curly-guide-jjp947rv6rgxfpq5x-5173.app.github.dev' 
     ) {
       callback(null, true);
     } else {
@@ -41,7 +48,7 @@ const corsOptions = {
   },
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
   optionsSuccessStatus: 200 
 };
 app.use(cors(corsOptions));

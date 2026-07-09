@@ -19,7 +19,7 @@ exports.getTodoItems = async (req, res, next) => {
 
 exports.createTodoItem = async (req, res, next) => {
   try {
-    const { task, date, completed } = req.body;
+    let { task, date, completed } = req.body;
     const user = await User.findById(req.session.user._id);
 
     if (!user) {
@@ -28,9 +28,15 @@ exports.createTodoItem = async (req, res, next) => {
         .json({ success: false, message: "User not found" });
     }
 
+    // THE FIX: If the date string ends with 'Z' (UTC flag), strip it out.
+    // This stops the 5 hours and 30 minutes forward shift in MongoDB!
+    if (typeof date === "string" && date.endsWith("Z")) {
+      date = date.slice(0, -1);
+    }
+
     const newTodo = {
       task,
-      date,
+      date: new Date(date), // Now parsed in the clean local context
       completed: completed || false,
     };
 
@@ -89,6 +95,34 @@ exports.taskCompletionStatus = async (req, res, next) => {
     res.status(200).json(todoItem);
   } catch (error) {
     console.error("Error updating status:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+exports.saveSubscription = async (req, res, next) => {
+  try {
+    const { subscription } = req.body;
+
+    if (!subscription) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Subscription data is required" });
+    }
+
+    // Find user using their active session ID
+    const user = await User.findById(req.session.user._id);
+
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+    user.pushSubscription = subscription;
+    await user.save();
+
+    res.status(200).json({ success: true, message: "Subscription updated successfully!" });
+  } catch (error) {
+    console.error("Error saving subscription:", error);
     res.status(500).json({ success: false, message: "Server error" });
   }
 };
