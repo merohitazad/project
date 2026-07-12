@@ -42,7 +42,7 @@ function TodoItems({ item }) {
         </div>
 
         {/* Right Section: Badges & Action */}
-        <div className="flex items-center justify-between sm:justify-end w-full sm:w-auto gap-4 shrink-0 pt-3 sm:pt-0 border-t border-gray-100 sm:border-t-0">
+        <div className="flex items-center justify-between sm:justify-end w-full sm:w-auto md:gap-4 shrink-0 pt-3 sm:pt-0 border-t border-gray-100 sm:border-t-0">
           
           {/* Metadata Badges Wrapper */}
           <div className="flex flex-row items-center gap-2 flex-wrap">

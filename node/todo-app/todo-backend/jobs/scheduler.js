@@ -1,4 +1,3 @@
-// backend/jobs/scheduler.js
 const cron = require("node-cron");
 const webpush = require("web-push");
 const User = require("../models/user"); 
@@ -12,56 +11,63 @@ webpush.setVapidDetails(
 async function checkDeadlinesAndNotify() {
   console.log("⚡ Executing automatic deadline inspection worker loop...");
   try {
+    const absoluteNow = new Date(); 
+    
+    // Window: 110 to 130 minutes from now (~2 hours)
+    const windowStart = new Date(absoluteNow.getTime() + (110 * 60 * 1000));
+    const windowEnd = new Date(absoluteNow.getTime() + (130 * 60 * 1000));   
+
     const users = await User.find({
-      "todoList": { $elemMatch: { completed: false } }
+      "pushSubscription": { $exists: true },
+      "todoList": {
+        $elemMatch: {
+          completed: false,
+          reminderSent: { $ne: true }, 
+          date: { $gte: windowStart, $lte: windowEnd }
+        }
+      }
     });
 
-    // 1. Get the current absolute global UTC timestamp
-    const absoluteNow = Date.now(); 
-    
-    // 2. THE CHRONO FIX: Shift the evaluation clock forward by 5.5 hours to match IST tracking
-    const fiveHalfHoursInMs = 5.5 * 60 * 60 * 1000;
-    const currentClockTimestamp = absoluteNow + fiveHalfHoursInMs;
-
-    const twoHoursInMs = 2 * 60 * 60 * 1000;      // 120 minutes
-    const tenMinutesInMs = 10 * 60 * 1000;         // 10 minute buffer window
-
     for (const user of users) {
-      console.log(`\nChecking user: ${user.username}`);
+      console.log(`\nProcessing reminders for user: ${user.username}`);
+      let hasUpdates = false;
 
-      const matchingTasks = user.todoList.filter(todo => {
-        if (todo.completed || !todo.date) return false;
+      // Extract a clean JS object for web-push
+      const subscriptionTarget = typeof user.pushSubscription.toObject === 'function' 
+        ? user.pushSubscription.toObject() 
+        : user.pushSubscription;
 
-        const taskDeadlineTimestamp = new Date(todo.date).getTime();
-        
-        // Compare the database timestamp directly against our adjusted local clock
-        const timeDifference = taskDeadlineTimestamp - currentClockTimestamp;
-        const minutesRemaining = Math.round(timeDifference / (1000 * 60));
+      for (const todo of user.todoList) {
+        if (!todo.completed && !todo.reminderSent && todo.date >= windowStart && todo.date <= windowEnd) {
+          
+          const payload = JSON.stringify({
+            title: "⏰ Task Deadline Reminder",
+            body: `Your task "${todo.task}" is due in less than 2 hours!`
+          });
 
-        console.log(`  -> Task: "${todo.task}"`);
-        console.log(`     Minutes remaining: ${minutesRemaining} mins (${(minutesRemaining / 60).toFixed(2)} hours)`);
-
-        // Check if it hits our 2-hour window target criteria smoothly
-        const matchesWindow = timeDifference >= (twoHoursInMs - tenMinutesInMs) && timeDifference <= (twoHoursInMs + tenMinutesInMs);
-        console.log(`     Matches target window? ${matchesWindow ? "YES 🎯" : "NO ⏳"}`);
-        
-        return matchesWindow;
-      });
-
-      for (const todo of matchingTasks) {
-        const payload = JSON.stringify({
-          title: "⏰ Task Deadline Reminder",
-          body: `Your task "${todo.task}" is due in less than 2 hours!`
-        });
-
-        if (user.pushSubscription) {
           try {
-            await webpush.sendNotification(user.pushSubscription, payload);
+            // Passing the completely sanitized subscription object
+            await webpush.sendNotification(subscriptionTarget, payload);
             console.log(`🎯 Automatic push alert delivered for: ${todo.task}`);
+            
+            todo.reminderSent = true;
+            hasUpdates = true;
           } catch (err) {
-            console.error("Push payload error:", err.message);
+            console.error(`Push payload error for user ${user.username}:`, err.message);
+            // If the subscription is no longer valid (expired/revoked), clear it
+            if (err.statusCode === 410 || err.statusCode === 404) {
+              console.log(`Removing expired subscription for ${user.username}`);
+              user.pushSubscription = undefined;
+              hasUpdates = true;
+              break; 
+            }
           }
         }
+      }
+      
+      // Only hit the DB if changes were successfully made
+      if (hasUpdates) {
+        await user.save();
       }
     }
   } catch (error) {
@@ -69,10 +75,10 @@ async function checkDeadlinesAndNotify() {
   }
 }
 
-// Fire on boot
-checkDeadlinesAndNotify();
-
-// Schedule to scan every 5 minutes
+// Start cron - runs every 5 minutes
 cron.schedule("*/5 * * * *", () => {
   checkDeadlinesAndNotify();
 });
+
+// Export the boot function so server.js can trigger it safely *after* DB connection
+module.exports = { checkDeadlinesAndNotify };

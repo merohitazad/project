@@ -80,6 +80,13 @@ mongoose
   .connect(MONGODB_URI)
   .then(() => {
     console.log("Connected to mongodb");
+    
+    // 1. Require the scheduler
+    const { checkDeadlinesAndNotify } = require("./jobs/scheduler");
+    
+    // 2. Safely execute the immediate boot-check now that Mongo is connected
+    checkDeadlinesAndNotify();
+
     app.listen(PORT, "0.0.0.0", () => {
       console.log(`Server running on address http://localhost:${PORT}`);
     });
