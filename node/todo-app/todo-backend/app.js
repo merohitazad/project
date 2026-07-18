@@ -10,6 +10,7 @@ const { MongoStore } = require("connect-mongo");
 
 // Local Modules
 const { todoItemsRouter } = require("./routes/todoItemsRouter");
+const { adminRouter } = require("./routes/adminRouter"); // Imported the new Admin Router
 const rootDir = require("./utils/pathUtil");
 const { authRouter } = require("./routes/authRouter");
 
@@ -73,8 +74,10 @@ app.use(
   }),
 );
 
+// Routers mapping layer
 app.use("/api/auth", authRouter);
 app.use("/api/todo", todoItemsRouter);
+app.use("/api/admin/todo", adminRouter); // Mounted the Admin Control Endpoint
 
 mongoose
   .connect(MONGODB_URI)

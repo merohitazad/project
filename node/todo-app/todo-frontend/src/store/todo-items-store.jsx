@@ -23,6 +23,8 @@ export const TodoItemsContext = createContext({
   todoItems: [],
   addNewItem: () => {},
   deleteItem: () => {},
+  addAdminItem: () => {},     
+  deleteAdminItem: () => {},  
   taskCompletionStatus: () => {},
   isLoggedIn: false,
   username: "",
@@ -74,8 +76,16 @@ export const TodoItemsContextProvider = ({ children }) => {
   const [loadingAuth, setLoadingAuth] = useState(true);
   const [loadingItems, setLoadingItems] = useState(false);
 
+  // Helper function to resolve backend URL dynamically for GitHub Codespaces environment routing
+  const getBackendUrl = () => {
+    let baseUrl = import.meta.env.VITE_BACKEND_URL || "";
+    if (!baseUrl && window.location.hostname.includes("github.dev")) {
+      baseUrl = `https://${window.location.hostname.replace("-5173.", "-3000.")}`;
+    }
+    return baseUrl;
+  };
+
   // --- AUTOMATIC BACKGROUND WEB PUSH REGISTRATION ---
-  // Runs automatically as soon as the user logs in successfully
   useEffect(() => {
     if (loadingAuth || !isLoggedIn) return;
 
@@ -86,18 +96,13 @@ export const TodoItemsContextProvider = ({ children }) => {
       }
 
       try {
-        // 1. Register sw.js script sitting in your public folder
         const registration = await navigator.serviceWorker.register("/sw.js");
-        
-        // 2. Automatically prompt user for permission if not granted yet
         const permission = await Notification.requestPermission();
         if (permission !== "granted") {
           console.warn("User has restricted notification permissions.");
           return;
         }
 
-        // 3. Generate browser credential tokens mapping to your backend public key
-        // FIXME: Replace this placeholder string with your real PUBLIC_VAPID_KEY from your backend .env
         const PUBLIC_VAPID_KEY = "YOUR_BACKEND_PUBLIC_VAPID_KEY_HERE"; 
         
         const subscription = await registration.pushManager.subscribe({
@@ -105,8 +110,8 @@ export const TodoItemsContextProvider = ({ children }) => {
           applicationServerKey: urlBase64ToUint8Array(PUBLIC_VAPID_KEY),
         });
 
-        // 4. Sync subscription array object to your updated Render endpoint routes
-        await fetch("/api/todo/save-subscription", {
+        const backendUrl = getBackendUrl();
+        await fetch(`${backendUrl}/api/todo/save-subscription`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -123,16 +128,42 @@ export const TodoItemsContextProvider = ({ children }) => {
     automaticPushSync();
   }, [isLoggedIn, loadingAuth, username]);
 
-  // --- Date Formatting Logic ---
+  // --- Safe Date Formatting Logic ---
   const formattedItem = (item) => {
     if (!item) return null;
 
-    let dateStrInput = item.dueDate;
+    let dateStrInput = item.dueDate || item.date;
+    
+    // Safely handle cases where no date is present
+    if (!dateStrInput) {
+      return {
+        id: item.id || item._id,
+        name: item.name || item.task,
+        dueDate: "No Date Set",
+        dueTime: "--:--",
+        rawDate: new Date().toISOString(),
+        completed: item.completed || false,
+      };
+    }
+
     if (typeof dateStrInput === "string" && dateStrInput.endsWith("Z")) {
       dateStrInput = dateStrInput.slice(0, -1);
     }
 
     const date = new Date(dateStrInput);
+    
+    // Fallback if Date parses to NaN (Invalid Date)
+    if (isNaN(date.getTime())) {
+      return {
+        id: item.id || item._id,
+        name: item.name || item.task,
+        dueDate: String(dateStrInput),
+        dueTime: "--:--",
+        rawDate: dateStrInput,
+        completed: item.completed || false,
+      };
+    }
+    
     const dateStr = `${date.getDate()} ${date.toLocaleString("en-US", { month: "short" })}, ${date.getFullYear()}`;
     const timeStr = date.toLocaleString("en-US", {
       hour: "numeric",
@@ -141,14 +172,40 @@ export const TodoItemsContextProvider = ({ children }) => {
     });
 
     return {
-      id: item.id,
-      name: item.name,
+      id: item.id || item._id,
+      name: item.name || item.task,
       dueDate: dateStr,     
       dueTime: timeStr,     
       rawDate: dateStrInput, 
-      completed: item.completed,
+      completed: item.completed || false,
     };
   };
+
+  // Sync admin broadcast items down to the management panel view state engine
+  useEffect(() => {
+    if (loadingAuth) return;
+
+    const fetchAdminFeedItems = async () => {
+      const backendUrl = getBackendUrl();
+      if (window.location.pathname === "/admin") {
+        setLoadingItems(true);
+        try {
+          const response = await fetch(`${backendUrl}/api/admin/todo`);
+          if (response.ok) {
+            const adminItems = await response.json();
+            const formatted = adminItems.map(item => formattedItem(item)).filter(Boolean);
+            dispatchTodoItems({ type: "SERVER_ITEMS", payload: { items: formatted } });
+          }
+        } catch (err) {
+          console.error("Failed loading administrative global broadcast items:", err);
+        } finally {
+          setLoadingItems(false);
+        }
+      }
+    };
+
+    fetchAdminFeedItems();
+  }, [isLoggedIn, loadingAuth]);
 
   useEffect(() => {
     const verifySessionOnRefresh = async () => {
@@ -163,14 +220,14 @@ export const TodoItemsContextProvider = ({ children }) => {
       } catch (error) {
         console.error("No active session recovered on boot:", error);
       } finally {
-        setLoadingAuth(false);
+        setLoadingAuth(false); 
       }
     };
     verifySessionOnRefresh();
   }, []);
 
   useEffect(() => {
-    if (loadingAuth) return;
+    if (loadingAuth || window.location.pathname === "/admin") return;
 
     if (!isLoggedIn) {
       dispatchTodoItems({ type: "CLEAR_ITEMS" });
@@ -198,6 +255,7 @@ export const TodoItemsContextProvider = ({ children }) => {
     fetchItems();
   }, [isLoggedIn, loadingAuth]);
 
+  // --- USER SPACE ACTION INTERFACES ---
   const addNewItem = async (itemName, itemDueDate) => {
     const tempId = `temp-${Date.now()}`;
     const optimisticItem = {
@@ -242,12 +300,67 @@ export const TodoItemsContextProvider = ({ children }) => {
     }
   };
 
+  // --- ADMIN CONTROL INTERFACES ---
+  const addAdminItem = async (itemName, itemDueDate) => {
+    const backendUrl = getBackendUrl();
+    const tempId = `temp-${Date.now()}`;
+    
+    const optimisticItem = {
+      id: tempId,
+      name: itemName,
+      dueDate: itemDueDate,
+      completed: false,
+      isSaving: true,
+    };
+    
+    // Add optimistic item to view state immediately
+    dispatchTodoItems({ type: "NEW_ITEM", payload: { ...formattedItem(optimisticItem), isSaving: true } });
+    
+    try {
+      const response = await fetch(`${backendUrl}/api/admin/todo`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ task: itemName, date: itemDueDate }),
+      });
+      
+      if (response.ok) {
+        const freshTask = await response.json();
+        // Remove optimistic card, then insert real completed task returned from database
+        dispatchTodoItems({ type: "DELETE_ITEM", payload: { itemId: tempId } });
+        dispatchTodoItems({ type: "NEW_ITEM", payload: formattedItem(freshTask) });
+      } else {
+        throw new Error("Server failed to persist broadcast record");
+      }
+    } catch (error) {
+      console.error("Failed executing structural database broadcast:", error);
+      // Clean up optimistic temp item from state if backend request fails
+      dispatchTodoItems({ type: "DELETE_ITEM", payload: { itemId: tempId } });
+    }
+  };
+
+  const deleteAdminItem = async (item) => {
+    const backendUrl = getBackendUrl();
+    dispatchTodoItems({ type: "DELETE_ITEM", payload: { itemId: item.id } });
+    
+    try {
+      const response = await fetch(`${backendUrl}/api/admin/todo/${item.id}`, {
+        method: "DELETE",
+      });
+      if (!response.ok) throw new Error("Retraction failed on database query layer");
+    } catch (error) {
+      console.error("Retraction server execution failed, rolling back:", error);
+      dispatchTodoItems({ type: "UNDO_DELETE", payload: { item: item } });
+    }
+  };
+
   return (
     <TodoItemsContext.Provider
       value={{
         todoItems,
         addNewItem,
         deleteItem,
+        addAdminItem,      
+        deleteAdminItem,    
         taskCompletionStatus,
         isLoggedIn,
         username,
