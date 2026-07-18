@@ -28,10 +28,12 @@ const PORT = process.env.PORT || 3000;
 // Temporary diagnostic log to verify variables load successfully on boot
 console.log("Loaded CORS_ORIGIN target:", CORS_ORIGIN);
 
+// Middleware Configuration Layer
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json()); // Moved up here to parse incoming JSON payloads early
 app.use(express.static(path.join(rootDir, "public")));
-app.use(express.json());
 
+// CORS Configuration
 const corsOptions = {
   origin: function (origin, callback) {
     if (
@@ -55,6 +57,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.options(/(.*)/, cors(corsOptions));
 
+// Session Setup
 const sessionStore = new MongoStore({ 
   mongoUrl: MONGODB_URI 
 });
@@ -79,6 +82,13 @@ app.use("/api/auth", authRouter);
 app.use("/api/todo", todoItemsRouter);
 app.use("/api/admin/todo", adminRouter); // Mounted the Admin Control Endpoint
 
+// Frontend Single Page Application (SPA) Fallback Route
+// This catches all non-API paths (like /admin) and returns index.html so the frontend router can take over
+app.get("*", (req, res) => {
+  res.sendFile(path.join(rootDir, "public", "index.html"));
+});
+
+// Database Connection & Server Boot
 mongoose
   .connect(MONGODB_URI)
   .then(() => {

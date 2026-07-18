@@ -49,9 +49,20 @@ function AdminTodoManager() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ username: enteredUser, password: enteredPass }),
+        credentials: "include", // FIX: Crucial for allowing express-session cookies to be saved across domains
       });
 
-      const data = await response.json();
+      // Prevent crashing with "Unexpected token '<'" if the server returns HTML instead of JSON
+      const responseText = await response.text();
+      let data = {};
+      
+      try {
+        data = JSON.parse(responseText);
+      } catch (parseError) {
+        console.error("Non-JSON error response detected:", responseText);
+        setLoginError("Server returned an invalid response. Verify routing structure.");
+        return;
+      }
 
       if (response.ok && data.success) {
         localStorage.setItem("batch_admin_session", "true");

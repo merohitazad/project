@@ -1,8 +1,8 @@
 const User = require("../models/user");
-const Admin = require("../models/admin");
+const Admin = require("../models/admin"); // Targets the "admins" collection containing the shared todo array
 const mongoose = require("mongoose");
 
-// 1. POST: Handle administrative authentication from Atlas credentials
+// 1. POST: Handle administrative authentication from the singular "admin" collection
 exports.adminLogin = async (req, res, next) => {
   try {
     const { username, password } = req.body;
@@ -11,7 +11,7 @@ exports.adminLogin = async (req, res, next) => {
       return res.status(400).json({ success: false, message: "Username and password are required" });
     }
 
-    // Explicitly target the singular "admin" collection where your "iimindore" user credential document lives
+    // Accessing the singular "admin" collection directly for ID and Password verification
     const credentialCollection = mongoose.connection.collection("admin");
     const admin = await credentialCollection.findOne({ username: username });
 
@@ -19,7 +19,7 @@ exports.adminLogin = async (req, res, next) => {
       return res.status(401).json({ success: false, message: "Access Denied: Admin user account not found." });
     }
 
-    // Direct string verification comparison against your Atlas entry data
+    // Direct string verification comparison against your entry data
     if (admin.password !== password) {
       return res.status(401).json({ success: false, message: "Access Denied: Password mismatch." });
     }
@@ -37,7 +37,7 @@ exports.adminLogin = async (req, res, next) => {
   }
 };
 
-// 2. GET: Fetch tasks directly from the global admin tracking list collection ("admins")
+// 2. GET: Fetch tasks directly from the global tracking collection ("admins") via the Admin model
 exports.getAdminTodoItems = async (req, res, next) => {
   try {
     // Finds the main document containing the tracking todo list array inside the "admins" collection
@@ -54,7 +54,7 @@ exports.getAdminTodoItems = async (req, res, next) => {
   }
 };
 
-// 3. POST: Save broadcast task inside the admin cluster tracking list AND push to all users
+// 3. POST: Save broadcast task inside the "admins" collection AND push to all users
 exports.createAdminTodoItem = async (req, res, next) => {
   try {
     let { task, date } = req.body;
@@ -97,7 +97,7 @@ exports.createAdminTodoItem = async (req, res, next) => {
   }
 };
 
-// 4. DELETE: Wipes the shared task out from the tracking cluster AND every student array profile
+// 4. DELETE: Wipes the shared task out from the "admins" collection AND every student array profile
 exports.deleteAdminTodoItem = async (req, res, next) => {
   try {
     const id = req.params.id;
@@ -106,16 +106,19 @@ exports.deleteAdminTodoItem = async (req, res, next) => {
       return res.status(400).json({ success: false, message: "Task ID is required" });
     }
 
+    // FIX: Convert the string ID parameter into a proper Mongoose ObjectId for explicit type matching
+    const objectId = new mongoose.Types.ObjectId(id);
+
     // Pull item out from the admin list tracking container document inside "admins"
     await Admin.updateOne(
       {},
-      { $pull: { todoList: { _id: id } } }
+      { $pull: { todoList: { _id: objectId } } }
     );
 
     // Pull item out from every single student user list array matching the broadcast id
     await User.updateMany(
       {},
-      { $pull: { todoList: { _id: id } } }
+      { $pull: { todoList: { _id: objectId } } }
     );
 
     res.status(200).json({ success: true, id });
