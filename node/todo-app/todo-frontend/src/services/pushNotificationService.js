@@ -33,7 +33,7 @@ export async function enablePushNotifications() {
 
     // 4. Generate the browser token mapping using your PUBLIC VAPID key
     // Replace this string with your actual backend public key
-    const PUBLIC_VAPID_KEY = "YOUR_BACKEND_PUBLIC_VAPID_KEY_HERE"; 
+    const PUBLIC_VAPID_KEY = "BDXEpgy2x4dovSmTNIUNEGO5W8l4nKuMM3rKQ1BNAmsnlTfT4sX3vPtVm4L3gvh1RikDzr2wEoTP76x9WNGxmuM"; 
     
     const subscription = await registration.pushManager.subscribe({
       userVisibleOnly: true,

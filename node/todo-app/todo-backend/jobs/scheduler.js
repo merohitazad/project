@@ -2,8 +2,9 @@ const cron = require("node-cron");
 const webpush = require("web-push");
 const User = require("../models/user"); 
 
+// Initializing strictly with the required cryptographic keys
 webpush.setVapidDetails(
-  process.env.VAPID_EMAIL || "mailto:rohit.kumar@example.com",
+  "", // Removed the VAPID_EMAIL process configuration entirely
   process.env.PUBLIC_VAPID_KEY,
   process.env.PRIVATE_VAPID_KEY
 );
