@@ -56,8 +56,8 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
-// Pre-flight OPTIONS route updated with named wildcard parameter to prevent PathErrors
-app.options('/:splat*', cors(corsOptions));
+// Pre-flight OPTIONS route updated to native RegExp to bypass path-to-regexp string compilation errors
+app.options(/(.*)/, cors(corsOptions));
 
 // Session Setup
 const sessionStore = new MongoStore({ 
@@ -85,8 +85,8 @@ app.use("/api/todo", todoItemsRouter);
 app.use("/api/admin/todo", adminRouter); // Mounted the Admin Control Endpoint
 
 // Frontend Single Page Application (SPA) Fallback Route
-// Updated from '*' to '/:splat*' to comply with strict path-to-regexp compilation checks
-app.get("/:splat*", (req, res) => {
+// Updated to a native RegExp literal to cleanly match any path without triggering compiler strictness checks
+app.get(/(.*)/, (req, res) => {
   res.sendFile(path.join(rootDir, "public", "index.html"));
 });
 
