@@ -32,7 +32,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static(path.join(rootDir, "public")));
 
-// CORS Configuration (Restored credentials: true to allow standard user session cookies)
+// CORS Configuration
 const corsOptions = {
   origin: function (origin, callback) {
     if (
@@ -54,9 +54,21 @@ const corsOptions = {
   optionsSuccessStatus: 200 
 };
 app.use(cors(corsOptions));
-app.options(/(.*)/, cors(corsOptions));
 
-// Session Setup (Restored to prevent req.session undefined crashes)
+// 100% Bulletproof Pre-flight OPTIONS Global Interceptor
+// This completely sidesteps path matching issues and guarantees correct headers are sent
+app.use((req, res, next) => {
+  if (req.method === 'OPTIONS') {
+    res.header('Access-Control-Allow-Origin', req.headers.origin);
+    res.header('Access-Control-Allow-Credentials', 'true');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+    return res.sendStatus(200);
+  }
+  next();
+});
+
+// Session Setup
 const sessionStore = new MongoStore({ 
   mongoUrl: MONGODB_URI 
 });
