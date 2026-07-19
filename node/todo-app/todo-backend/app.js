@@ -4,13 +4,11 @@ const path = require("path");
 // External Modules
 const express = require("express");
 const cors = require("cors");
-const session = require("express-session");
 const mongoose = require("mongoose");
-const { MongoStore } = require("connect-mongo");
 
 // Local Modules
 const { todoItemsRouter } = require("./routes/todoItemsRouter");
-const { adminRouter } = require("./routes/adminRouter"); // Imported the new Admin Router
+const { adminRouter } = require("./routes/adminRouter");
 const rootDir = require("./utils/pathUtil");
 const { authRouter } = require("./routes/authRouter");
 
@@ -21,19 +19,17 @@ const app = express();
 app.set('trust proxy', 1);
 
 const MONGODB_URI = process.env.MONGODB_URI;
-const SESSION_SECRET = process.env.SESSION_SECRET;
 const CORS_ORIGIN = process.env.CORS_ORIGIN;
 const PORT = process.env.PORT || 3000;
 
-// Temporary diagnostic log to verify variables load successfully on boot
 console.log("Loaded CORS_ORIGIN target:", CORS_ORIGIN);
 
 // Middleware Configuration Layer
 app.use(express.urlencoded({ extended: true }));
-app.use(express.json()); // Moved up here to parse incoming JSON payloads early
+app.use(express.json());
 app.use(express.static(path.join(rootDir, "public")));
 
-// CORS Configuration
+// CORS Configuration (Cleaned up: credentials set to false as sessions are deprecated)
 const corsOptions = {
   origin: function (origin, callback) {
     if (
@@ -49,43 +45,22 @@ const corsOptions = {
       callback(new Error('Not allowed by CORS'));
     }
   },
-  credentials: true,
+  credentials: false, // Session cookies are no longer used
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
   optionsSuccessStatus: 200 
 };
 app.use(cors(corsOptions));
-
-// Pre-flight OPTIONS route updated to safely use a native regex catch-all
 app.options(/(.*)/, cors(corsOptions));
 
-// Session Setup
-const sessionStore = new MongoStore({ 
-  mongoUrl: MONGODB_URI 
-});
-
-app.use(
-  session({
-    secret: SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    store: sessionStore,
-    cookie: {
-      maxAge: 1000 * 60 * 60 * 24 * 10, // 10 days
-      httpOnly: true,
-      secure: true,      
-      sameSite: "none",  
-    },
-  }),
-);
+// REMOVED: Session Setup layer entirely (No express-session or MongoStore instantiation)
 
 // Routers mapping layer
 app.use("/api/auth", authRouter);
 app.use("/api/todo", todoItemsRouter);
-app.use("/api/admin/todo", adminRouter); // Mounted the Admin Control Endpoint
+app.use("/api/admin/todo", adminRouter);
 
 // Frontend Single Page Application (SPA) Fallback Route
-// This RegExp matches any path EXCEPT those starting with /api, preventing index.html from overriding your actual endpoints
 app.get(/^\/(?!api).*/, (req, res) => {
   res.sendFile(path.join(rootDir, "public", "index.html"));
 });
@@ -96,10 +71,7 @@ mongoose
   .then(() => {
     console.log("Connected to mongodb");
     
-    // 1. Require the scheduler
     const { checkDeadlinesAndNotify } = require("./jobs/scheduler");
-    
-    // 2. Safely execute the immediate boot-check now that Mongo is connected
     checkDeadlinesAndNotify();
 
     app.listen(PORT, "0.0.0.0", () => {
