@@ -4,7 +4,9 @@ const path = require("path");
 // External Modules
 const express = require("express");
 const cors = require("cors");
+const session = require("express-session");
 const mongoose = require("mongoose");
+const { MongoStore } = require("connect-mongo");
 
 // Local Modules
 const { todoItemsRouter } = require("./routes/todoItemsRouter");
@@ -19,6 +21,7 @@ const app = express();
 app.set('trust proxy', 1);
 
 const MONGODB_URI = process.env.MONGODB_URI;
+const SESSION_SECRET = process.env.SESSION_SECRET;
 const CORS_ORIGIN = process.env.CORS_ORIGIN;
 const PORT = process.env.PORT || 3000;
 
@@ -29,7 +32,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static(path.join(rootDir, "public")));
 
-// CORS Configuration (Cleaned up: credentials set to false as sessions are deprecated)
+// CORS Configuration (Restored credentials: true to allow standard user session cookies)
 const corsOptions = {
   origin: function (origin, callback) {
     if (
@@ -45,7 +48,7 @@ const corsOptions = {
       callback(new Error('Not allowed by CORS'));
     }
   },
-  credentials: false, // Session cookies are no longer used
+  credentials: true, 
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
   optionsSuccessStatus: 200 
@@ -53,7 +56,25 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.options(/(.*)/, cors(corsOptions));
 
-// REMOVED: Session Setup layer entirely (No express-session or MongoStore instantiation)
+// Session Setup (Restored to prevent req.session undefined crashes)
+const sessionStore = new MongoStore({ 
+  mongoUrl: MONGODB_URI 
+});
+
+app.use(
+  session({
+    secret: SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    store: sessionStore,
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24 * 10, // 10 days
+      httpOnly: true,
+      secure: true,      
+      sameSite: "none",  
+    },
+  }),
+);
 
 // Routers mapping layer
 app.use("/api/auth", authRouter);
