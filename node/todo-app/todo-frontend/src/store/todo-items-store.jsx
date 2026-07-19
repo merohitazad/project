@@ -7,6 +7,13 @@ import {
 } from "../services/itemsService";
 import { checkAuthStatus } from "../services/authService";
 
+// IMPORTED: Secure administrative service hooks that pass cookie credentials correctly
+import {
+  fetchAdminItemsFromServer,
+  addAdminItemToServer,
+  deleteAdminItemFromServer,
+} from "../services/adminService"; // Double-check this relative path matches your directory structure
+
 // Helper utility to convert VAPID keys to a compatible Uint8Array format
 function urlBase64ToUint8Array(base64String) {
   const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
@@ -76,9 +83,9 @@ export const TodoItemsContextProvider = ({ children }) => {
   const [loadingAuth, setLoadingAuth] = useState(true);
   const [loadingItems, setLoadingItems] = useState(false);
 
-  // Helper function to resolve backend URL dynamically for GitHub Codespaces environment routing
+  // Helper function resolved to target the correct Vercel variable mapping
   const getBackendUrl = () => {
-    let baseUrl = import.meta.env.VITE_BACKEND_URL || "";
+    let baseUrl = import.meta.env.VITE_API_URL || "";
     if (!baseUrl && window.location.hostname.includes("github.dev")) {
       baseUrl = `https://${window.location.hostname.replace("-5173.", "-3000.")}`;
     }
@@ -134,7 +141,6 @@ export const TodoItemsContextProvider = ({ children }) => {
 
     let dateStrInput = item.dueDate || item.date;
     
-    // Safely handle cases where no date is present
     if (!dateStrInput) {
       return {
         id: item.id || item._id,
@@ -152,7 +158,6 @@ export const TodoItemsContextProvider = ({ children }) => {
 
     const date = new Date(dateStrInput);
     
-    // Fallback if Date parses to NaN (Invalid Date)
     if (isNaN(date.getTime())) {
       return {
         id: item.id || item._id,
@@ -186,16 +191,12 @@ export const TodoItemsContextProvider = ({ children }) => {
     if (loadingAuth) return;
 
     const fetchAdminFeedItems = async () => {
-      const backendUrl = getBackendUrl();
       if (window.location.pathname === "/admin") {
         setLoadingItems(true);
         try {
-          const response = await fetch(`${backendUrl}/api/admin/todo`);
-          if (response.ok) {
-            const adminItems = await response.json();
-            const formatted = adminItems.map(item => formattedItem(item)).filter(Boolean);
-            dispatchTodoItems({ type: "SERVER_ITEMS", payload: { items: formatted } });
-          }
+          // MODIFIED: Uses your secure, credential-safe API utility pipeline
+          const formattedItems = await fetchAdminItemsFromServer();
+          dispatchTodoItems({ type: "SERVER_ITEMS", payload: { items: formattedItems } });
         } catch (err) {
           console.error("Failed loading administrative global broadcast items:", err);
         } finally {
@@ -302,7 +303,6 @@ export const TodoItemsContextProvider = ({ children }) => {
 
   // --- ADMIN CONTROL INTERFACES ---
   const addAdminItem = async (itemName, itemDueDate) => {
-    const backendUrl = getBackendUrl();
     const tempId = `temp-${Date.now()}`;
     
     const optimisticItem = {
@@ -313,40 +313,26 @@ export const TodoItemsContextProvider = ({ children }) => {
       isSaving: true,
     };
     
-    // Add optimistic item to view state immediately
     dispatchTodoItems({ type: "NEW_ITEM", payload: { ...formattedItem(optimisticItem), isSaving: true } });
     
     try {
-      const response = await fetch(`${backendUrl}/api/admin/todo`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ task: itemName, date: itemDueDate }),
-      });
+      // MODIFIED: Replaced raw fetch with your structured service function
+      const freshTask = await addAdminItemToServer(itemName, itemDueDate);
       
-      if (response.ok) {
-        const freshTask = await response.json();
-        // Remove optimistic card, then insert real completed task returned from database
-        dispatchTodoItems({ type: "DELETE_ITEM", payload: { itemId: tempId } });
-        dispatchTodoItems({ type: "NEW_ITEM", payload: formattedItem(freshTask) });
-      } else {
-        throw new Error("Server failed to persist broadcast record");
-      }
+      dispatchTodoItems({ type: "DELETE_ITEM", payload: { itemId: tempId } });
+      dispatchTodoItems({ type: "NEW_ITEM", payload: freshTask });
     } catch (error) {
       console.error("Failed executing structural database broadcast:", error);
-      // Clean up optimistic temp item from state if backend request fails
       dispatchTodoItems({ type: "DELETE_ITEM", payload: { itemId: tempId } });
     }
   };
 
   const deleteAdminItem = async (item) => {
-    const backendUrl = getBackendUrl();
     dispatchTodoItems({ type: "DELETE_ITEM", payload: { itemId: item.id } });
     
     try {
-      const response = await fetch(`${backendUrl}/api/admin/todo/${item.id}`, {
-        method: "DELETE",
-      });
-      if (!response.ok) throw new Error("Retraction failed on database query layer");
+      // MODIFIED: Replaced raw fetch with your structured service function
+      await deleteAdminItemFromServer(item.id);
     } catch (error) {
       console.error("Retraction server execution failed, rolling back:", error);
       dispatchTodoItems({ type: "UNDO_DELETE", payload: { item: item } });

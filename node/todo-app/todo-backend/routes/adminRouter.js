@@ -8,9 +8,9 @@ const adminController = require("../controllers/adminController");
 // Authentication Gate Route
 adminRouter.post("/login", adminController.adminLogin);
 
-// Core routes for bulk managing the 500 student task fields
-adminRouter.get("/", adminController.getAdminTodoItems);
-adminRouter.post("/", adminController.createAdminTodoItem);
+// Core routes for bulk managing tasks (Updated paths to handle optional trailing slashes safely)
+adminRouter.get("/?", adminController.getAdminTodoItems);
+adminRouter.post("/?", adminController.createAdminTodoItem);
 adminRouter.delete("/:id", adminController.deleteAdminTodoItem);
 
 exports.adminRouter = adminRouter;
