@@ -56,7 +56,7 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
-// Pre-flight OPTIONS route updated to native RegExp to bypass path-to-regexp string compilation errors
+// Pre-flight OPTIONS route updated to safely use a native regex catch-all
 app.options(/(.*)/, cors(corsOptions));
 
 // Session Setup
@@ -85,8 +85,8 @@ app.use("/api/todo", todoItemsRouter);
 app.use("/api/admin/todo", adminRouter); // Mounted the Admin Control Endpoint
 
 // Frontend Single Page Application (SPA) Fallback Route
-// Updated to a native RegExp literal to cleanly match any path without triggering compiler strictness checks
-app.get(/(.*)/, (req, res) => {
+// This RegExp matches any path EXCEPT those starting with /api, preventing index.html from overriding your actual endpoints
+app.get(/^\/(?!api).*/, (req, res) => {
   res.sendFile(path.join(rootDir, "public", "index.html"));
 });
 
