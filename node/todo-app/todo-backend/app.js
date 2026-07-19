@@ -55,7 +55,9 @@ const corsOptions = {
   optionsSuccessStatus: 200 
 };
 app.use(cors(corsOptions));
-app.options('(.*)', cors(corsOptions));
+
+// Pre-flight OPTIONS route updated with named wildcard parameter to prevent PathErrors
+app.options('/:splat*', cors(corsOptions));
 
 // Session Setup
 const sessionStore = new MongoStore({ 
@@ -83,8 +85,8 @@ app.use("/api/todo", todoItemsRouter);
 app.use("/api/admin/todo", adminRouter); // Mounted the Admin Control Endpoint
 
 // Frontend Single Page Application (SPA) Fallback Route
-// This catches all non-API paths (like /admin) and returns index.html so the frontend router can take over
-app.get("*", (req, res) => {
+// Updated from '*' to '/:splat*' to comply with strict path-to-regexp compilation checks
+app.get("/:splat*", (req, res) => {
   res.sendFile(path.join(rootDir, "public", "index.html"));
 });
 
