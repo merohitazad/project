@@ -8,6 +8,8 @@ const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
+  const isAdminPath = location.pathname === "/admin";
+
   const handleLogout = async () => {
     try {
       const response = await logoutUser();
@@ -35,7 +37,12 @@ const Header = () => {
 
       <nav>
         <div className="flex items-center gap-2 md:gap-4">
-          {!isLoggedIn ? (
+          {/* SCREEN CONDITION 1: Render specific layout if currently viewing the Admin gate */}
+          {isAdminPath ? (
+            <div className="text-white bg-blue-600 px-4 py-2 rounded-lg font-medium text-sm md:text-base border border-blue-400">
+              System Admin Panel
+            </div>
+          ) : !isLoggedIn ? (
             <>
               <Link
                 to="/login"
