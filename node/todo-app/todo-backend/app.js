@@ -55,7 +55,7 @@ const corsOptions = {
   optionsSuccessStatus: 200 
 };
 app.use(cors(corsOptions));
-app.options(/(.*)/, cors(corsOptions));
+app.options('(.*)', cors(corsOptions));
 
 // Session Setup
 const sessionStore = new MongoStore({ 
