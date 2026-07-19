@@ -4,6 +4,41 @@ import { MdDelete, MdLock, MdPerson, MdLogout } from "react-icons/md";
 import { BiCalendarAlt, BiTimeFive } from "react-icons/bi";
 import { TodoItemsContext } from "../store/todo-items-store";
 
+// Helper formatting logic to convert ISO timestamps or raw inputs to clean "14 Jul, 2026" and time variants
+const formatDateString = (rawDateString) => {
+  if (!rawDateString) return { dateStr: "No Date Set", timeStr: "--:--" };
+  
+  let cleanedInput = rawDateString;
+  if (typeof cleanedInput === "string" && cleanedInput.endsWith("Z")) {
+    cleanedInput = cleanedInput.slice(0, -1);
+  }
+
+  const date = new Date(cleanedInput);
+  if (isNaN(date.getTime())) {
+    // If it's already a string, check if it needs formatting or if it already looks correct
+    let fallbackStr = String(rawDateString);
+    // If it's a string like "14 Jul 2026" without a comma, add the comma
+    if (/^\d+\s+[A-Za-z]+\s+\d+$/.test(fallbackStr)) {
+      const parts = fallbackStr.split(/\s+/);
+      fallbackStr = `${parts[0]} ${parts[1]}, ${parts[2]}`;
+    }
+    return { 
+      dateStr: fallbackStr, 
+      timeStr: "--:--" 
+    };
+  }
+
+  // Formats cleanly to "14 Jul, 2026" with the comma included
+  const dateStr = `${date.getDate()} ${date.toLocaleString("en-US", { month: "short" })}, ${date.getFullYear()}`;
+  const timeStr = date.toLocaleString("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  });
+
+  return { dateStr, timeStr };
+};
+
 function AdminTodoManager() {
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
   const [loginError, setLoginError] = useState("");
@@ -41,7 +76,7 @@ function AdminTodoManager() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ username: enteredUser, password: enteredPass }),
-        credentials: "include", // RESTORED: Crucial for allowing express-session cookies to be saved across domains
+        credentials: "include", // Maintained for cross-domain cookie passing
       });
 
       const responseText = await response.text();
@@ -198,39 +233,46 @@ function AdminTodoManager() {
             No active batch tasks broadcasted.
           </div>
         ) : (
-          todoItems.map((item) => (
-            <div key={item.id || item.name} className="w-full my-2 px-5 sm:px-8">
-              <div className="w-full px-5 py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between bg-white rounded-2xl border border-gray-200 hover:border-blue-400 hover:shadow-md transition-all duration-300 ease-in-out shadow-sm">
-                <div className="flex items-center w-full sm:w-auto flex-1 min-w-0 mb-4 sm:mb-0">
-                  <div className="text-left text-base sm:text-lg font-medium pr-6 text-gray-800 break-words overflow-hidden flex-1">
-                    {item.name}
-                  </div>
-                </div>
-                <div className="flex items-center justify-between sm:justify-end w-full sm:w-auto md:gap-4 shrink-0 pt-3 sm:pt-0 border-t border-gray-100 sm:border-t-0">
-                  <div className="flex flex-row items-center gap-2 flex-wrap">
-                    <div className="flex items-center gap-2 px-4 py-1.5 bg-blue-50/60 text-blue-700 rounded-full text-sm md:text-base font-medium border border-blue-100/50">
-                      <BiCalendarAlt className="text-base shrink-0 text-blue-500" />
-                      {/* MODIFIED: Strips out the comma to match the desired format exactly */}
-                      <span>{item.dueDate ? item.dueDate.replace(",", "") : ""}</span>
-                    </div>
-                    <div className="flex items-center gap-2 px-4 py-1.5 bg-amber-50/60 text-amber-700 rounded-full text-sm md:text-base font-medium border border-amber-100/50">
-                      <BiTimeFive className="text-base shrink-0 text-amber-500" />
-                      <span>{item.dueTime}</span>
+          todoItems.map((item) => {
+            // Evaluates and formats date layers cleanly for every object entry parsed
+            const { dateStr, timeStr } = formatDateString(item.dueDate || item.date);
+
+            return (
+              <div key={item.id || item.name} className="w-full my-2 px-5 sm:px-8">
+                <div className="w-full px-5 py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between bg-white rounded-2xl border border-gray-200 hover:border-blue-400 hover:shadow-md transition-all duration-300 ease-in-out shadow-sm">
+                  <div className="flex items-center w-full sm:w-auto flex-1 min-w-0 mb-4 sm:mb-0">
+                    <div className="text-left text-base sm:text-lg font-medium pr-6 text-gray-800 break-words overflow-hidden flex-1">
+                      {item.name}
                     </div>
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => deleteAdminItem(item)}
-                    disabled={item.isSaving || false}
-                    aria-label="Delete task"
-                    className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-xl bg-gray-50 hover:bg-red-50 text-gray-400 hover:text-red-600 border border-gray-100 hover:border-red-100 transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed shrink-0 shadow-sm hover:shadow"
-                  >
-                    <MdDelete className="text-lg sm:text-xl" />
-                  </button>
+                  <div className="flex items-center justify-between sm:justify-end w-full sm:w-auto md:gap-4 shrink-0 pt-3 sm:pt-0 border-t border-gray-100 sm:border-t-0">
+                    <div className="flex flex-row items-center gap-2 flex-wrap">
+                      <div className="flex items-center gap-2 px-4 py-1.5 bg-blue-50/60 text-blue-700 rounded-full text-sm md:text-base font-medium border border-blue-100/50">
+                        <BiCalendarAlt className="text-base shrink-0 text-blue-500" />
+                        <span>{dateStr}</span>
+                      </div>
+                      
+                      {timeStr !== "--:--" && (
+                        <div className="flex items-center gap-2 px-4 py-1.5 bg-amber-50/60 text-amber-700 rounded-full text-sm md:text-base font-medium border border-amber-100/50">
+                          <BiTimeFive className="text-base shrink-0 text-amber-500" />
+                          <span>{timeStr}</span>
+                        </div>
+                      )}
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => deleteAdminItem(item)}
+                      disabled={item.isSaving || false}
+                      aria-label="Delete task"
+                      className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-xl bg-gray-50 hover:bg-red-50 text-gray-400 hover:text-red-600 border border-gray-100 hover:border-red-100 transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed shrink-0 shadow-sm hover:shadow"
+                    >
+                      <MdDelete className="text-lg sm:text-xl" />
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))
+            );
+          })
         )}
       </div>
     </div>
