@@ -1,6 +1,6 @@
 import { useRef, useContext, useState, useEffect } from "react";
 import { IoAddCircleOutline } from "react-icons/io5";
-import { MdDelete, MdLock, MdPerson, MdLogout, MdPeople } from "react-icons/md";
+import { MdDelete, MdLock, MdPerson, MdLogout } from "react-icons/md";
 import { BiCalendarAlt, BiTimeFive } from "react-icons/bi";
 import { TodoItemsContext } from "../store/todo-items-store";
 
@@ -32,10 +32,11 @@ function AdminTodoManager() {
     const enteredUser = adminUsernameInput.current.value;
     const enteredPass = adminPasswordInput.current.value;
 
-    // --- DYNAMIC CODESPACES BASE URL RESOLUTION ---
-    let backendBaseUrl = import.meta.env.VITE_BACKEND_URL || "";
+    // --- UPDATED BASE URL RESOLUTION LAYER ---
+    // Targets the correct Vercel variable definition mapping
+    let backendBaseUrl = import.meta.env.VITE_API_URL || "";
     
-    // Fallback: If no env variable is loaded, dynamically calculate it from window.location
+    // Fallback: If no env variable is loaded, dynamically calculate it from window.location (Codespaces)
     if (!backendBaseUrl && window.location.hostname.includes("github.dev")) {
       backendBaseUrl = `https://${window.location.hostname.replace("-5173.", "-3000.")}`;
     }
@@ -49,7 +50,7 @@ function AdminTodoManager() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ username: enteredUser, password: enteredPass }),
-        credentials: "include", // FIX: Crucial for allowing express-session cookies to be saved across domains
+        credentials: "include", // Crucial for allowing express-session cookies to save across domains
       });
 
       // Prevent crashing with "Unexpected token '<'" if the server returns HTML instead of JSON
@@ -221,14 +222,12 @@ function AdminTodoManager() {
             <div key={item.id || item.name} className="w-full my-2 px-5 sm:px-8">
               <div className="w-full px-5 py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between bg-white rounded-2xl border border-gray-200 hover:border-blue-400 hover:shadow-md transition-all duration-300 ease-in-out shadow-sm">
                 
-                {/* Task Title Area mapped to sanitized context keys */}
                 <div className="flex items-center w-full sm:w-auto flex-1 min-w-0 mb-4 sm:mb-0">
                   <div className="text-left text-base sm:text-lg font-medium pr-6 text-gray-800 break-words overflow-hidden flex-1">
                     {item.name}
                   </div>
                 </div>
 
-                {/* Badges & Operations Grid */}
                 <div className="flex items-center justify-between sm:justify-end w-full sm:w-auto md:gap-4 shrink-0 pt-3 sm:pt-0 border-t border-gray-100 sm:border-t-0">
                   
                   <div className="flex flex-row items-center gap-2 flex-wrap">
@@ -243,7 +242,6 @@ function AdminTodoManager() {
                     </div>
                   </div>
 
-                  {/* Operational Target Clean Button */}
                   <button
                     type="button"
                     onClick={() => deleteAdminItem(item)}
