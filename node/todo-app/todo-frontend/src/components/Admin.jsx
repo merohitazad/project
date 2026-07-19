@@ -5,20 +5,16 @@ import { BiCalendarAlt, BiTimeFive } from "react-icons/bi";
 import { TodoItemsContext } from "../store/todo-items-store";
 
 function AdminTodoManager() {
-  // 1. LOCAL AUTHENTICATION STATES
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
   const [loginError, setLoginError] = useState("");
   
   const adminUsernameInput = useRef();
   const adminPasswordInput = useRef();
 
-  // 2. GLOBAL TASK CONTROL CONTEXT
   const { todoItems, addAdminItem, deleteAdminItem } = useContext(TodoItemsContext);
-
   const todoNameElement = useRef();
   const dueDateElement = useRef();
 
-  // Check for active admin session tokens on component mount
   useEffect(() => {
     const activeAdminSession = localStorage.getItem("batch_admin_session");
     if (activeAdminSession === "true") {
@@ -26,17 +22,12 @@ function AdminTodoManager() {
     }
   }, []);
 
-  // Connected Database Validation pipeline
   const handleAdminLogin = async (e) => {
     e.preventDefault();
     const enteredUser = adminUsernameInput.current.value;
     const enteredPass = adminPasswordInput.current.value;
 
-    // --- UPDATED BASE URL RESOLUTION LAYER ---
-    // Targets the correct Vercel variable definition mapping
     let backendBaseUrl = import.meta.env.VITE_API_URL || "";
-    
-    // Fallback: If no env variable is loaded, dynamically calculate it from window.location (Codespaces)
     if (!backendBaseUrl && window.location.hostname.includes("github.dev")) {
       backendBaseUrl = `https://${window.location.hostname.replace("-5173.", "-3000.")}`;
     }
@@ -50,10 +41,9 @@ function AdminTodoManager() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ username: enteredUser, password: enteredPass }),
-        credentials: "include", // Crucial for allowing express-session cookies to save across domains
+        // REMOVED: credentials: "include" (No session cookies needed anymore)
       });
 
-      // Prevent crashing with "Unexpected token '<'" if the server returns HTML instead of JSON
       const responseText = await response.text();
       let data = {};
       
@@ -66,6 +56,7 @@ function AdminTodoManager() {
       }
 
       if (response.ok && data.success) {
+        // Authenticate locally using storage validation flags
         localStorage.setItem("batch_admin_session", "true");
         setIsAdminLoggedIn(true);
         setLoginError("");
@@ -87,16 +78,13 @@ function AdminTodoManager() {
     event.preventDefault();
     const todoName = todoNameElement.current.value;
     const dueDate = dueDateElement.current.value;
-
     if (!todoName || !dueDate) return;
 
     addAdminItem(todoName, dueDate);
-
     todoNameElement.current.value = "";
     dueDateElement.current.value = "";
   };
 
-  // --- SCREEN 1: THE ADMIN GATEWAY LOCK (Renders if unauthorized) ---
   if (!isAdminLoggedIn) {
     return (
       <div className="min-h-[80vh] flex items-center justify-center bg-gray-50 font-sans p-4">
@@ -160,11 +148,8 @@ function AdminTodoManager() {
     );
   }
 
-  // --- SCREEN 2: THE COMBINED ADMIN MANAGEMENT CONTROL VIEW ---
   return (
     <div className="w-full font-sans max-w-5xl mx-auto py-4">
-      
-      {/* Dynamic Status Dashboard Header */}
       <div className="mx-5 md:mx-8 mb-6 flex items-center justify-between bg-white p-4 rounded-2xl border border-gray-200 shadow-sm">
         <div className="text-left">
           <h1 className="text-lg font-bold text-gray-900">Batch Task Control</h1>
@@ -181,7 +166,6 @@ function AdminTodoManager() {
         </div>
       </div>
 
-      {/* INPUT FORM SECTION */}
       <div className="container mx-auto px-5 mb-4 md:mb-0 md:px-8">
         <form
           onSubmit={handleAddButtonClicked}
@@ -193,14 +177,12 @@ function AdminTodoManager() {
             placeholder="Broadcast Task Name..."
             className="w-full md:w-[1000px] px-4 py-3 border border-gray-400 rounded-xl text-base transition-all focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
           />
-
           <div className="flex flex-1 gap-3">
             <input
               type="datetime-local"
               ref={dueDateElement}
               className="flex-1 md:w-[150px] h-12 px-3 border border-gray-400 rounded-xl transition-all focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
             />
-
             <button
               type="submit"
               className="w-12 h-12 flex items-center justify-center rounded-xl bg-green-600 text-white text-3xl cursor-pointer transition-all hover:bg-green-700 hover:scale-105 active:scale-95"
@@ -211,7 +193,6 @@ function AdminTodoManager() {
         </form>
       </div>
 
-      {/* TASK BROADCAST DISPLAY FEED */}
       <div className="flex flex-col items-center w-full">
         {!todoItems || todoItems.length === 0 ? (
           <div className="p-8 text-center text-gray-400 text-base">
@@ -221,27 +202,22 @@ function AdminTodoManager() {
           todoItems.map((item) => (
             <div key={item.id || item.name} className="w-full my-2 px-5 sm:px-8">
               <div className="w-full px-5 py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between bg-white rounded-2xl border border-gray-200 hover:border-blue-400 hover:shadow-md transition-all duration-300 ease-in-out shadow-sm">
-                
                 <div className="flex items-center w-full sm:w-auto flex-1 min-w-0 mb-4 sm:mb-0">
                   <div className="text-left text-base sm:text-lg font-medium pr-6 text-gray-800 break-words overflow-hidden flex-1">
                     {item.name}
                   </div>
                 </div>
-
                 <div className="flex items-center justify-between sm:justify-end w-full sm:w-auto md:gap-4 shrink-0 pt-3 sm:pt-0 border-t border-gray-100 sm:border-t-0">
-                  
                   <div className="flex flex-row items-center gap-2 flex-wrap">
                     <div className="flex items-center gap-2 px-4 py-1.5 bg-blue-50/60 text-blue-700 rounded-full text-sm md:text-base font-medium border border-blue-100/50">
                       <BiCalendarAlt className="text-base shrink-0 text-blue-500" />
                       <span>{item.dueDate}</span>
                     </div>
-
                     <div className="flex items-center gap-2 px-4 py-1.5 bg-amber-50/60 text-amber-700 rounded-full text-sm md:text-base font-medium border border-amber-100/50">
                       <BiTimeFive className="text-base shrink-0 text-amber-500" />
                       <span>{item.dueTime}</span>
                     </div>
                   </div>
-
                   <button
                     type="button"
                     onClick={() => deleteAdminItem(item)}
@@ -251,14 +227,12 @@ function AdminTodoManager() {
                   >
                     <MdDelete className="text-lg sm:text-xl" />
                   </button>
-
                 </div>
               </div>
             </div>
           ))
         )}
       </div>
-
     </div>
   );
 }
