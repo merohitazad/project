@@ -41,7 +41,7 @@ function AdminTodoManager() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ username: enteredUser, password: enteredPass }),
-        // REMOVED: credentials: "include" (No session cookies needed anymore)
+        credentials: "include", // RESTORED: Crucial for allowing express-session cookies to be saved across domains
       });
 
       const responseText = await response.text();
@@ -56,7 +56,6 @@ function AdminTodoManager() {
       }
 
       if (response.ok && data.success) {
-        // Authenticate locally using storage validation flags
         localStorage.setItem("batch_admin_session", "true");
         setIsAdminLoggedIn(true);
         setLoginError("");
@@ -211,7 +210,8 @@ function AdminTodoManager() {
                   <div className="flex flex-row items-center gap-2 flex-wrap">
                     <div className="flex items-center gap-2 px-4 py-1.5 bg-blue-50/60 text-blue-700 rounded-full text-sm md:text-base font-medium border border-blue-100/50">
                       <BiCalendarAlt className="text-base shrink-0 text-blue-500" />
-                      <span>{item.dueDate}</span>
+                      {/* MODIFIED: Strips out the comma to match the desired format exactly */}
+                      <span>{item.dueDate ? item.dueDate.replace(",", "") : ""}</span>
                     </div>
                     <div className="flex items-center gap-2 px-4 py-1.5 bg-amber-50/60 text-amber-700 rounded-full text-sm md:text-base font-medium border border-amber-100/50">
                       <BiTimeFive className="text-base shrink-0 text-amber-500" />
